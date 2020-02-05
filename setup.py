@@ -27,7 +27,8 @@ setup(
     name='python-graspfile',
     version='0.0.1',
     license='MIT',
-    description='A package for reading, manipulating and eventually writing files output from TICRA Tools GRASP and CHAMP software using numpy etc.',
+    description="A package for reading, manipulating and eventually writing files output from TICRA Tools GRASP and "
+                "CHAMP software using numpy etc.",
     long_description='%s\n%s' % (
         re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('', read('README.rst')),
         re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('CHANGELOG.rst'))
@@ -83,7 +84,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'python-graspfile = python_graspfile.cli:main',
+            'python-graspfile = graspfile.cli:main',
         ]
     },
 )

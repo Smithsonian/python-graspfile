@@ -6,7 +6,7 @@ source =
 [run]
 branch = true
 source =
-    python_graspfile
+    graspfile
     tests
 parallel = true
 

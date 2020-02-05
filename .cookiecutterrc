@@ -40,7 +40,7 @@ default_context:
     landscape:                 'no'
     license:                   'MIT license'
     linter:                    'flake8'
-    package_name:              'python_graspfile'
+    package_name:              'graspfile'
     project_name:              'python-graspfile'
     project_short_description: 'A package for reading, manipulating and eventually writing files output from TICRA Tools GRASP and CHAMP software using numpy etc.'
     pypi_badge:                'no'
