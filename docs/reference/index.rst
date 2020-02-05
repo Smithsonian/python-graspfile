@@ -1,10 +1,7 @@
 Reference
 =========
 
-.. toctree::
-    :glob:
-
-    .. automodule:: graspfile
+.. automodule:: graspfile
 
      Members
      =======
