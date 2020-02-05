@@ -1,11 +1,4 @@
 """This is the module for manipulating cut files containing one or more field cuts from TICRA Tools, GRASP and CHAMP
-
-.. automodule:: cut
-
-    Members
-    =======
-
-    :members:
 """
 
 import numpy, math
