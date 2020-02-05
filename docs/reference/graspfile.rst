@@ -1,12 +1,11 @@
 graspfile
 ================
 
-.. testsetup::
-
-    from graspfile import *
+.. contents::
+    :local:
 
 .. automodule:: graspfile
 
     Members
     =======
-    :members:
+
