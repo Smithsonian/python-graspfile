@@ -5,6 +5,8 @@
     Members
     =======
 
+    :members:
+
 """
 
 import string

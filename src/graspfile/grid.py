@@ -1,14 +1,12 @@
-# grid.py
-#
-# Paul Grimes, March 2009
-#
-# Module to read GRASP output grids into numpy arrays
-# Ported from GRASP Reference Manual page F25
-#
-# The function stores each record as a list over datasets with the file
-# the number of datasets is stored in nset
-#
-# Currently assumes that file is of type "formatted"
+"""This is the module for manipulating cut files containing one or more field cuts from TICRA Tools, GRASP and CHAMP
+
+.. automodule:: grid
+
+    Members
+    =======
+    :members:
+
+"""
 
 
 import numpy
