@@ -4,4 +4,7 @@ Reference
 .. toctree::
     :glob:
 
-    graspfile*
+    .. automodule:: graspfile
+
+     Members
+     =======
