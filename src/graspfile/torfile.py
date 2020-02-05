@@ -1,12 +1,6 @@
-# A class to hold a parsed GRASP Tor File in a collection of objects
-#
-# Paul Grimes, 2018
-#
-# The data from the Tor file will be parsed by a pyparsing parser defined in GraspTorParser
-# and stored in a GraspTorFile class derived from collections.OrderedDict, containing
-# GraspTorObjects and Comments.
+"""A class to hold a parsed GRASP Tor File in a collection of objects"""
 
-import GraspTorParser
+import graspfile.torparser
 from collections import OrderedDict
 
 _debug_ = True

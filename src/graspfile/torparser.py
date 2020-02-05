@@ -1,6 +1,4 @@
-# torparser.py
-#
-# pyparsing parser for GRASP .tor files
+"""pyparsing parser for GRASP .tor files"""
 
 from pyparsing import *
 import pprint

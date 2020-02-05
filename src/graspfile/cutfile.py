@@ -1,13 +1,12 @@
 """This is the module for manipulating cut files containing one or more field cuts from TICRA Tools, GRASP and CHAMP
 """
 
-import GraspFile.GraspCut as GraspCut
+import graspfile.cut as cut
 
 
 class GraspCutSet:
     """Class for containing a set of cuts with a common parameter, such as
     frequency, beam, etc."""
-
     def __init__(self):
         self.cuts = []
 
@@ -42,7 +41,7 @@ class GraspCutFile:
                 # Have we already collected a cut?
                 if temp_text != []:
                     # Create new cut
-                    new_cut = GraspCut.GraspCut()
+                    new_cut = cut.GraspCut()
                     new_cut.read(temp_text)
                     if new_cut.constant in self.constants:
                         # We must start a new cut_set
@@ -57,7 +56,7 @@ class GraspCutFile:
 
         # Append the last cut to the file
         if temp_text != []:
-            new_cut = GraspCut.GraspCut()
+            new_cut = cut.GraspCut()
             new_cut.read(temp_text)
             self.cut_sets[cut_set].cuts.append(new_cut)
             self.constants.append(new_cut.constant)
