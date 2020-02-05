@@ -4,8 +4,15 @@
 #
 # P. Grimes, March 2009
 #
-# Class to read, write and manipulate GRASP cut files
 #
+"""This is the module for manipulating cut files containing one or more field cuts from TICRA Tools, GRASP and CHAMP
+
+.. automodule:: cutfile
+
+    Members
+    =======
+
+"""
 
 import string
 import GraspFile.GraspCut as GraspCut
