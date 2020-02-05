@@ -1,4 +1,4 @@
-# GraspGrid.py
+# grid.py
 #
 # Paul Grimes, March 2009
 #

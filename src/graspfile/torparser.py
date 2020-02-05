@@ -1,4 +1,4 @@
-# GraspTorParser.py
+# torparser.py
 #
 # pyparsing parser for GRASP .tor files
 
