@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-#
-# GRASP_cut.py
-#
-# P. Grimes, March 2009
-#
-#
 """This is the module for manipulating cut files containing one or more field cuts from TICRA Tools, GRASP and CHAMP
 
 .. automodule:: cutfile
