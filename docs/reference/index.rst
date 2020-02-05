@@ -4,4 +4,4 @@ Reference
 .. toctree::
     :glob:
 
-    python_graspfile*
+    graspfile*
