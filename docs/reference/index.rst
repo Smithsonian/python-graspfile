@@ -1,7 +1,6 @@
 Reference
 =========
 
-.. automodule:: graspfile
+.. automodapi:: graspfile
+    :include-all-objects:
 
-     Members
-     =======

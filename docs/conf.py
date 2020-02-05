@@ -6,6 +6,7 @@ import os
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
+    'sphinx.ext.automodapi',
     'sphinx.ext.coverage',
     'sphinx.ext.doctest',
     'sphinx.ext.extlinks',
