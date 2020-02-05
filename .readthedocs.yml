@@ -22,5 +22,5 @@ python:
   install:
     - requirements: docs/requirements.txt
     # Install package using pip for the build (needed for autodoc)
-    - method: pip
+    - method: setuptools
         path: .

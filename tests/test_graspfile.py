@@ -1,6 +1,3 @@
 
-from graspfile.cli import main
+import graspfile
 
-
-def test_main():
-    assert main([]) == 0
