@@ -6,4 +6,5 @@ graspfile
     from graspfile import *
 
 .. automodule:: graspfile
-    :members:
+    :members: cut, cutfile, grid
+

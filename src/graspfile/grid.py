@@ -60,7 +60,7 @@ class GraspField:
         # find the number of points in the grid
         line = f.readline().split()
         self.grid_n_x = int(line[0])
-        self.grid_n_y = int(line[1])S
+        self.grid_n_y = int(line[1])
         self.k_limit = int(line[2])
 
         self.grid_step_x = (self.grid_max_x - self.grid_min_x) / (self.grid_n_x - 1)
