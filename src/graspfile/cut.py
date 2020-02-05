@@ -1,4 +1,4 @@
-"""This is the module for manipulating cut files containing one or more field cuts from TICRA Tools, GRASP and CHAMP
+"""This is the module for manipulating individual cuts from TICRA Tools, GRASP and CHAMP cutfiles
 """
 
 import numpy, math

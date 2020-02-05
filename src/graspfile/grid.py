@@ -1,7 +1,6 @@
 """This is the module for manipulating grid files containing one or more field cuts from TICRA Tools, GRASP and CHAMP
 """
 
-
 import numpy
 
 
