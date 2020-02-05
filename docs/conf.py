@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-import sphinx_py3doc_enhanced_theme
+import sphinx_rtd_theme
 
 # -- General configuration ------------------------------------------------
 autoclass_content = "both"  # include both class docstring and __init__
@@ -48,10 +48,9 @@ extlinks = {
 }
 
 
-html_theme = "sphinx_py3doc_enhanced_theme"
-html_theme_path = [sphinx_py3doc_enhanced_theme.get_html_theme_path()]
+html_theme = "sphinx_rtd_theme"
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_theme_options = {
-    'githuburl': 'https://github.com/paulkgrimes/python-graspfile/'
 }
 
 html_use_smartypants = True

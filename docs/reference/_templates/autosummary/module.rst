@@ -5,6 +5,4 @@
     :local:
 
 .. automodule:: {{fullname}}
-
-    Members
-    =======
+    :members:
