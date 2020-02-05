@@ -1,5 +1,9 @@
 Reference
 =========
 
-.. automodapi:: graspfile
+.. automodule:: graspfile
+    :imported-members:
+
+    Members
+    =======
 

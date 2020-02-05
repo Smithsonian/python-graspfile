@@ -2,7 +2,22 @@
 from __future__ import unicode_literals
 
 import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
 import sphinx_py3doc_enhanced_theme
+
+# -- General configuration ------------------------------------------------
+autoclass_content = "both"  # include both class docstring and __init__
+autodoc_default_flags = [
+        # Make sure that any autodoc declarations show the right members
+        "members",
+        "inherited-members",
+        "private-members",
+        "show-inheritance",
+]
+autosummary_generate = True  # Make _autosummary files and include them
+napoleon_numpy_docstring = False  # Force consistency, leave only Google
+napoleon_use_rtype = False  # More legible
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -16,6 +31,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
 ]
+numpydoc_show_class_members = False
 source_suffix = '.rst'
 master_doc = 'index'
 project = 'python-graspfile'
