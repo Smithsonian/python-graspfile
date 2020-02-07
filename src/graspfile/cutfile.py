@@ -8,7 +8,7 @@ class GraspCutSet:
     """Class for containing a set of cuts with a common parameter, such as
     frequency, beam, etc."""
     def __init__(self):
-        #: list: List of class:GraspCut objects in the set.
+        #: list: List of :class:`.GraspCut` objects in the set.
         self.cuts = []
 
 
@@ -20,7 +20,7 @@ class GraspCutFile:
         #: str: The filename the cuts were read from
         self.filename = ""
 
-        #: list: List of class:GraspCutSet, each representing a set of cuts within the file
+        #: list: List of :class:`.GraspCutSet`, each representing a set of cuts within the file
         self.cut_sets = [GraspCutSet()]
 
         #: str: Describes the type of cut represented in the file.

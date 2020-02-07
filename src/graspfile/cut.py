@@ -16,7 +16,7 @@ class GraspCut:
         #:
         #: No GRASP equivalent
         #:
-        #: Value signifies the following cut types
+        #: Value signifies the following cut types:
         #:     :1: Spherical cut
         #:     :2: Planar or surface cut
         #:     :3: Cylindrical cut
@@ -77,7 +77,7 @@ class GraspCut:
         #:     :6: XPD fields: Erhc/Elhc and Elhc/Erhc.
         #:     :7: XPD fields: Eco/Ecx and Ecx/Eco.
         #:     :8: XPD fields: Emaj/Emin and Emin/Emaj.
-        #:     :9: Total power |E| and Erhc=Elhc.
+        #:     :9: Total power \|E\| and Erhc=Elhc.
         #:
         self.polarization = 3
 
