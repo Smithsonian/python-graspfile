@@ -1,17 +1,24 @@
 """A class to hold a parsed GRASP Tor File in a collection of objects"""
 
-import graspfile.torparser
+import graspfile.torparser as torparser
 from collections import OrderedDict
 
 _debug_ = True
+
+"""List of acceptable GraspTorObject types"""
+grasp_object_types = [""]
 
 
 class GraspTorValue:
     """A container for values from GraspTorMember objects"""
 
     def __init__(self, tor_value=None):
+        #: str: The value as a string
         self.value = None
+
+        #: str: The unit of the value as a string
         self.unit = None
+
         if tor_value:
             self.fill(tor_value)
 
@@ -33,7 +40,10 @@ class GraspTorMember:
     """A container for the member parameter of an GraspTorObject """
 
     def __init__(self, tor_member=None):
+        #: str: The name of the member of a GraspTorObject
         self.name = None
+
+        #: various GraspTor values: The value of the Member parameter
         self._value = None
         if tor_member:
             self.fill(tor_member)
@@ -100,6 +110,8 @@ class GraspTorRef:
     """A container for a value that is a reference to another GraspTorObject"""
 
     def __init__(self, tor_ref=None):
+
+        #: str: Reference to another GraspTorObject
         self.ref = None
         if tor_ref:
             self.fill(tor_ref)
@@ -111,7 +123,7 @@ class GraspTorRef:
 
 
 class GraspTorSequence(list):
-    """A container for a value that is a sequence of GraspTorValues"""
+    """A container for a value that is a sequence of GraspTorValues."""
     def __init__(self, tor_seq=None):
         super().__init__()
         if tor_seq:
@@ -147,8 +159,13 @@ class GraspTorStruct(OrderedDict):
 class GraspTorComment:
     """A container for comments from a GraspTorFile"""
     def __init__(self, tor_comment=None):
+        #: str: Name of comment object
         self.name = None
+
+        #: str: Test of the comment object
         self.text = None
+
+        #: int: Line number that the comment appears in.
         self.location = None
         if tor_comment:
             self.fill(tor_comment)
@@ -172,14 +189,14 @@ class GraspTorObject(OrderedDict):
 
         if isinstance(tor_obj, str):
             self.read_str(tor_obj)
-        elif isinstance(tor_obj, GraspTorParser.ParseResults):
+        elif isinstance(tor_obj, torparser.ParseResults):
             self.fill(tor_obj)
         else:
             pass
 
     def read_str(self, tor_str):
         """Read the contents of the string into a torObject and then process the results"""
-        res = GraspTorParser.torObjects.parseString(tor_str)
+        res = torparser.tor_object.parseString(tor_str)
         self.fill(res)
 
     def fill(self, tor_obj):
@@ -192,6 +209,29 @@ class GraspTorObject(OrderedDict):
         for r in tor_obj[2:]:
             self[r[0]] = GraspTorMember(r)
 
+    @property
+    def name(self):
+        """Return the name of the GraspTorObject"""
+        return self._name
+
+    @name.setter
+    def name(self, new_name):
+        """Set th name of the GraspTorObject"""
+        self._name = new_name
+
+    @property
+    def type(self):
+        """Return the type of the GraspTorObject"""
+        return self._type
+
+    @type.setter
+    def type(self, new_type):
+        """Set the type of the GraspTorObject. Checks that type is sane"""
+        # if new_type in grasp_object_types:
+        #     self._type = new_type
+        # else:
+        #     raise ValueError("Unknown type for a GraspTorObject")
+        self._type = new_type
 
 class GraspTorFile(OrderedDict):
     """A container for objects read from a tor file.  Subclasses OrderedDict to provide a dict of torObjects
@@ -200,7 +240,7 @@ class GraspTorFile(OrderedDict):
     def __init__(self, fileLike=None):
         """Create a TorFile object, and if fileLike is specified, read the file"""
         OrderedDict.__init__(self)
-        self._parser = GraspTorParser.torFile
+        self._parser = torparser.tor_file
         if fileLike:
             self.read(fileLike)
 
@@ -226,7 +266,7 @@ class GraspTorFile(OrderedDict):
 if __name__ == "__main__":
     import StringIO
 
-    testFile = StringIO.StringIO(GraspTorParser.test_str)
+    testFile = StringIO.StringIO(torparser.test_str)
 
     gtf = GraspTorFile(testFile)
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# ChampApertureFieldEdxFile.py
+# ApertureField.py
 #
 # P. Grimes, Feb 2018
 #
@@ -19,12 +19,11 @@ from matplotlib import pyplot as pp
 
 class ApertureField:
     """Class to parse and hold data from a CHAMP .edx output file."""
-
     def __init__(self, fileLike=None):
         """Create a ApertureField object, reading and parsing from <file>.
 
         if file not given, create empty object to be filled with .read, etc."""
-        # Flag to prevent errors from calling methods on objects with no data
+        #: bool: Flag to prevent errors from calling methods on objects with no data
         self.__ready = False
 
         if fileLike:

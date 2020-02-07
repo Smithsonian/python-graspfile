@@ -8,6 +8,7 @@ class GraspCutSet:
     """Class for containing a set of cuts with a common parameter, such as
     frequency, beam, etc."""
     def __init__(self):
+        #: list: List of class:GraspCut objects in the set.
         self.cuts = []
 
 
@@ -16,9 +17,24 @@ class GraspCutFile:
     output cut files"""
 
     def __init__(self):
+        #: str: The filename the cuts were read from
         self.filename = ""
+
+        #: list: List of class:GraspCutSet, each representing a set of cuts within the file
         self.cut_sets = [GraspCutSet()]
+
+        #: str: Describes the type of cut represented in the file.
+        #:
+        #:     Options are:
+        #:
+        #:     :``spherical``: a cut defined on the surface of a sphere
+        #:     :``planar``: a cut defined on a planar surface or the surface of a reflector
+        #:     :``cylindrical``: a cut defined on the surface of a cylinder
+        #:
+        #:
         self.cut_type = "spherical"
+
+        #: list: A list of the constant values for each set of cuts.
         self.constants = []
 
     def read(self, filename):

@@ -5,10 +5,10 @@ import numpy
 
 
 class GraspField:
-    """Object holding a single dataset from a Grasp field on grid output file (*.grd)
+    """Object holding a single dataset from a Grasp field on grid output file (``*.grd``)
 
-    The field is held in a complex numpy array of shape (grid_n_x, grid_n_y, ncomp)
-    where grid_n_x and grid_n_y set the number of points in the grid and ncomp is the
+    The field is held in a complex numpy array of shape ``(grid_n_x, grid_n_y, ncomp)``
+    where ``grid_n_x`` and ``grid_n_y`` set the number of points in the grid and ``ncomp`` is the
     number of field components"""
 
     # This layout of array should mean that the polarisation components for a point
@@ -16,22 +16,44 @@ class GraspField:
 
     def __init__(self):
         # initialize storage variables
-        # Beam centre in [x,y] form
+        #: list: Beam centre in [x,y] form
         self.beam_centre = [0.0, 0.0]
 
         # Grid parameters
+        #: float: Minimum extent of grid in 1st dimension
         self.grid_min_x = 0.0
+
+        #: float: Minimum extent of grid in 2nd dimension
         self.grid_min_y = 0.0
+
+        #: float: Maximum extent of grid in 1st dimension
         self.grid_max_x = 0.0
+
+        #: float: Maximum extent of grid in 2nd dimension
         self.grid_max_y = 0.0
+
+        #: int: Number of points in grid in 1st dimension
         self.grid_n_x = 0
+
+        #: int: Number of points in grid in 2nd dimension
         self.grid_n_y = 0
+
+        #: float: step size of grid in 1st dimension
         self.grid_step_x = 0.0
+
+        #: float: step size of grid in 2nd dimension
         self.grid_step_y = 0.0
+
+        #: int: defines whether grid is filled or sparse
+        #:
+        #:     :0: filled
+        #:     :1: sparse
+        #:
         self.k_limit = 0  # Is grid sparse (0=filled, 1=sparse)
         self.ncomp = 0
 
         # the field object is numpy array of shape (grid_n_x, grid_n_y, ncomp)
+        #: numpy.ndarray: the array of complex field components.
         self.field = None
 
     def read_grasp_field(self, f, ncomp):
