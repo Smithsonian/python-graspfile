@@ -10,100 +10,84 @@ class GraspCut:
 
     def __init__(self):
         self.text = ""
-        """str: Cut description"""
+        """str: Cut description."""
 
         self.cut_type = 1
-        """
-        int: Cut type.
+        """int: Cut type.
             Describes the type of cut.
             No GRASP equivalent
         
-            Values
-            ------
-                1 :
-                    Spherical cut
-                2 :
-                    Planar or surface cut
-                3 :
-                    Cylindrical cut
-        """
+            Values signify:
+                1: Spherical cut
+                2: Planar or surface cut
+                3: Cylindrical cut"""
 
         self.v_ini = 0
-        #: float: Initial value of variable that cut is swept over
-        #:
-        #: GRASP Parameter V_INI
+        """float: Initial value of variable that cut is swept over.
+            GRASP Parameter V_INI"""
 
-        #: float: Increment of variable that cut is swept over
-        #:
-        #: GRASP Parameter V_INI
         self.v_inc = 1
+        """float: Increment of variable that cut is swept over.
+            GRASP Parameter V_INI"""
 
-        #: int: Number of steps for variable that cut is swept over
-        #:
-        #: GRASP Parameter V_NUM
         self.v_num = 1
+        """int: Number of steps for variable that cut is swept over.
+            GRASP Parameter V_NUM"""
 
-        #: float: Constant variable for cut
-        #:
-        #: GRASP Parameter C
-        #:
-        #: definition determined by ICUT
         self.constant = 0.0
+        """float: Constant variable for cut.
+            GRASP Parameter C
+            
+            definition determined by ICUT."""
 
-        #: int: Cut definition.
-        #:
-        #: GRASP Parameter ICUT
-        #:
-        #: Values signify the following cut definitions:
-        #:
-        #: For spherical cuts:
-        #:   :1: Standard polar cut with fixed phi
-        #:   :2: Conical cut with fixed theta
-        #:
-        #: For planar and surface cut
-        #:   :1: Radial cut with fixed phi and variable distance rho
-        #:   :2: Circular cut at fixed rho and variable phi
-        #:
-        #: For cylindrical cut
-        #:   :1: axial cut with fixed phi and variable z
-        #:   :2: circular cut with fixed z and variable phi
-        #:
         self.icut = 1
+        """int: Cut definition.
+            GRASP Parameter ICUT
+            
+            Values signify the following cut definitions:
+                For spherical cuts:
+                    1: Standard polar cut with fixed phi
+                    2: Conical cut with fixed theta
+                    
+                For planar and surface cut
+                    1: Radial cut with fixed phi and variable distance rho
+                    2: Circular cut at fixed rho and variable phi
+                    
+                For cylindrical cut
+                    1: axial cut with fixed phi and variable z
+                    2: circular cut with fixed z and variable phi"""
 
-        #: int: Polarization definition for the cut.
-        #:
-        #: GRASP Parameter ICOMP
-        #:
-        #: Values signify the following polarization definitions
-        #:     :1: Linear E_theta and E_phi.
-        #:     :2: Right hand and left hand circular (Erhc and Elhc).
-        #:     :3: Linear Eco and Ecx (Ludwig's third definition).
-        #:     :4: Linear along major and minor axes of the polarisation ellipse, Emaj and Emin.
-        #:     :5: XPD fields: E_theta/E_phi and E_phi/E_theta.
-        #:     :6: XPD fields: Erhc/Elhc and Elhc/Erhc.
-        #:     :7: XPD fields: Eco/Ecx and Ecx/Eco.
-        #:     :8: XPD fields: Emaj/Emin and Emin/Emaj.
-        #:     :9: Total power \|E\| and Erhc=Elhc.
-        #:
         self.polarization = 3
+        """int: Polarization definition for the cut.
+            GRASP Parameter ICOMP
+            
+            Values signify the following polarization definitions
+                1: Linear E_theta and E_phi.
+                2: Right hand and left hand circular (Erhc and Elhc).
+                3: Linear Eco and Ecx (Ludwig's third definition).
+                4: Linear along major and minor axes of the polarisation ellipse, Emaj and Emin.
+                5: XPD fields: E_theta/E_phi and E_phi/E_theta.
+                6: XPD fields: Erhc/Elhc and Elhc/Erhc.
+                7: XPD fields: Eco/Ecx and Ecx/Eco.
+                8: XPD fields: Emaj/Emin and Emin/Emaj.
+                9: Total power \|E\| and Erhc=Elhc."""
 
-        #: int: Number of field components
-        #:
-        #: GRASP Parameter NCOMP
-        #:
-        #: Value signifies:
-        #:    :2: for far field
-        #:    :3: for near field.  3rd component is always E_z
         self.field_components = 2
+        """int: Number of field components
+            GRASP Parameter NCOMP
+            
+            Value signifies:
+                2: for far field
+                3: for near field.  3rd component is always E_z"""
 
-        #: numpy.ndarray: Cut Data as complex array of field components
-        #:
-        #: named columns are:
-        #:     :0: 'pos' : position coordinate
-        #:     :1: 'f1'  : first field component
-        #:     :2: 'f2'  : second field component
-        #:     :3: 'f3'  : third field component if `self.field_components` equals 3
         self.data = numpy.ndarray((0, 0))
+        """numpy.ndarray: Cut Data as complex array of field components
+        
+        named columns are:
+            0: 'pos' : position coordinate
+            1: 'f1'  : first field component
+            2: 'f2'  : second field component
+            3: 'f3'  : third field component if `self.field_components` equals 3."""
 
     def read(self, lines):
         """Read cut from lines of text and parse as a cut, filing the
