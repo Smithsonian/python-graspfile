@@ -9,24 +9,29 @@ class GraspCut:
     output cuts"""
 
     def __init__(self):
-        #: str: Cut description
         self.text = ""
+        """str: Cut description"""
 
-        #: int: Cut type.
-        #:     Describes the type of cut.
-        #:     No GRASP equivalent
-        #:
-        #:     Values signify
-        #:     --------------
-        #:     1 : Spherical cut
-        #:     2 : Planar or surface cut
-        #:     3 : Cylindrical cut
         self.cut_type = 1
+        """
+        int: Cut type.
+            Describes the type of cut.
+            No GRASP equivalent
+        
+            Values
+            ------
+                1 :
+                    Spherical cut
+                2 :
+                    Planar or surface cut
+                3 :
+                    Cylindrical cut
+        """
 
+        self.v_ini = 0
         #: float: Initial value of variable that cut is swept over
         #:
         #: GRASP Parameter V_INI
-        self.v_ini = 0
 
         #: float: Increment of variable that cut is swept over
         #:
