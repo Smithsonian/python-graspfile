@@ -16,45 +16,46 @@ class GraspField:
 
     def __init__(self):
         # initialize storage variables
-        #: list: Beam centre in [x,y] form
-        self.beam_centre = [0.0, 0.0]
+        self.beam_center = [0.0, 0.0]
+        """list: Beam center in [x,y] form"""
 
         # Grid parameters
-        #: float: Minimum extent of grid in 1st dimension
         self.grid_min_x = 0.0
+        """float: Minimum extent of grid in 1st dimension"""
 
-        #: float: Minimum extent of grid in 2nd dimension
         self.grid_min_y = 0.0
+        """float: Minimum extent of grid in 2nd dimension"""
 
-        #: float: Maximum extent of grid in 1st dimension
         self.grid_max_x = 0.0
+        """float: Maximum extent of grid in 1st dimension"""
 
-        #: float: Maximum extent of grid in 2nd dimension
         self.grid_max_y = 0.0
+        """float: Maximum extent of grid in 2nd dimension"""
 
-        #: int: Number of points in grid in 1st dimension
         self.grid_n_x = 0
+        """int: Number of points in grid in 1st dimension"""
 
-        #: int: Number of points in grid in 2nd dimension
         self.grid_n_y = 0
+        """int: Number of points in grid in 2nd dimension"""
 
-        #: float: step size of grid in 1st dimension
         self.grid_step_x = 0.0
+        """float: step size of grid in 1st dimension"""
 
-        #: float: step size of grid in 2nd dimension
         self.grid_step_y = 0.0
+        """float: step size of grid in 2nd dimension"""
 
-        #: int: defines whether grid is filled or sparse
-        #:
-        #:     :0: filled
-        #:     :1: sparse
-        #:
         self.k_limit = 0  # Is grid sparse (0=filled, 1=sparse)
-        self.ncomp = 0
+        """int: defines whether grid is filled or sparse
+            * 0: filled
+            * 1: sparse"""
 
-        # the field object is numpy array of shape (grid_n_x, grid_n_y, ncomp)
-        #: numpy.ndarray: the array of complex field components.
+        self.ncomp = 0
+        """Number of field components in grid.
+            ``2`` for far fields, ``3`` for near fields."""
+
         self.field = None
+        """numpy.ndarray: the array of complex field components.
+            the field object is numpy array of shape ``(grid_n_x, grid_n_y, ncomp)``"""
 
     def read_grasp_field(self, f, ncomp):
         """Reads the Grasp dataset from the file object passed in.  This assumes that
@@ -112,14 +113,14 @@ class GraspField:
         pos_x = self.grid_min_x + self.grid_step_x * i
         pos_y = self.grid_min_y + self.grid_step_y * j
 
-        off_x = pos_x - self.beam_centre[0]
-        off_y = pos_y - self.beam_centre[1]
+        off_x = pos_x - self.beam_center[0]
+        off_y = pos_y - self.beam_center[1]
 
         return numpy.sqrt(off_x ** 2 + off_y ** 2)
 
     def grid_pos(self):
         """Return meshed grids of the x and y positions of each point in the field"""
-        return numpy.meshgrid(numpy.linspace(self.grid_min_x, self.grid_max_x, self.grid_n_x), \
+        return numpy.meshgrid(numpy.linspace(self.grid_min_x, self.grid_max_x, self.grid_n_x),
                               numpy.linspace(self.grid_min_y, self.grid_max_y, self.grid_n_y))
 
     def radius_grid(self, center=None):
@@ -127,7 +128,7 @@ class GraspField:
         grid_x, grid_y = self.grid_pos()
 
         if center is None:
-            center = self.beam_centre
+            center = self.beam_center
 
         return numpy.sqrt((grid_x - center[0]) ** 2 + (grid_y - center[1]) ** 2)
 
@@ -150,16 +151,29 @@ class GraspGrid:
         self.header = ""
 
         # File Type parameters
-        self.ktype = 0  # type of file format
-        self.nset = 0  # number of datasets
-        self.icomp = 0  # type of field components
-        self.ncomp = 0  # number of field components
-        self.igrid = 0  # grid type
+        self.ktype = 0
+        """int: type of file format."""
+
+        self.nset = 0
+        """int: number of grids in file."""
+
+        self.icomp = 0
+        """int: type of field components."""
+
+        self.ncomp = 0
+        """int: number of field components"""
+
+        self.igrid = 0
+        """int: grid type"""
 
         self.freqs = None
-        # List of field objects
+        """list: List of frequencies in GHz"""
+
         self.fields = []
+        """list of (:obj:`GraspField`): List of individual fields in file,"""
+
         self.beam_centers = []
+        """list: list of beam centers for invidual fields in the file."""
 
     def read_grasp_grid(self, fi):
         """Reads GRASP output grid files from file object and fills a number of variables
