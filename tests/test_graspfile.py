@@ -18,30 +18,27 @@ def grid_file():
     return open(test_grid_file)
 
 @pytest.fixture
-def filled_grasp_grid(grid_file, empty_grasp_grid):
+def filled_grasp_grid(empty_grasp_grid, grid_file):
     """Return an empty GraspGrid instance."""
-    grasp_grid = empty_grasp_grid.read(grid_file)
-    grid_file.close()
-    return grasp_grid
-
-
-def test_loading_grid(empty_grasp_grid, grid_file):
-    """Test loading grid from a TICRA Grid file."""
     empty_grasp_grid.read_grasp_grid(grid_file)
     grid_file.close()
+    return empty_grasp_grid
 
+
+def test_loading_grid(filled_grasp_grid):
+    """Test loading grid from a TICRA Grid file."""
     # check that enough freqs and fields were read
-    assert len(empty_grasp_grid.freqs) == 3
-    assert len(empty_grasp_grid.fields) == 3
+    assert len(filled_grasp_grid.freqs) == 3
+    assert len(filled_grasp_grid.fields) == 3
 
     # Check that parameters were read correctly
-    assert empty_grasp_grid.ktype == 1
-    assert empty_grasp_grid.nset == 3
-    assert empty_grasp_grid.icomp == 3
-    assert empty_grasp_grid.ncomp == 3
-    assert empty_grasp_grid.igrid == 3
+    assert filled_grasp_grid.ktype == 1
+    assert filled_grasp_grid.nset == 3
+    assert filled_grasp_grid.icomp == 3
+    assert filled_grasp_grid.ncomp == 3
+    assert filled_grasp_grid.igrid == 3
 
     # Check that beam centers were read correctly
-    assert len(empty_grasp_grid.beam_centers) == 3
-    for bc in empty_grasp_grid.beam_centers:
+    assert len(filled_grasp_grid.beam_centers) == 3
+    for bc in filled_grasp_grid.beam_centers:
         assert bc == [0, 0]

@@ -148,7 +148,8 @@ class GraspGrid:
     def __init__(self):
         """Create empty variables or lists of attributes for holding data for each dataset"""
         # Text Header
-        self.header = ""
+        self.header = []
+        """list of str: List of lines in the header section of the file"""
 
         # File Type parameters
         self.ktype = 0
@@ -167,7 +168,10 @@ class GraspGrid:
         """int: grid type"""
 
         self.freqs = None
-        """list: List of frequencies in GHz"""
+        """list: List of frequencies in units of ``freq_unit``"""
+
+        self.freq_unit = ""
+        """str: The unit that the frequencies are given in."""
 
         self.fields = []
         """list of (:obj:`GraspField`): List of individual fields in file,"""
@@ -180,21 +184,20 @@ class GraspGrid:
         and numpy arrays with the data"""
 
         # Loop over initial lines before "++++" getting text
-        self.header = ""
+        self.header = []
 
         while 1:
             line = fi.readline()
             if line[0:4] == "++++":
                 break
             else:
-                self.header = self.header + line
+                self.header.append(line)
 
         # Parse the header to get the frequency information
-        for line in self.header.split("\n"):
+        for (l, line) in enumerate(self.header):
             term, arg, res = line.partition(":")
-            # print term
             if term.strip() == "FREQUENCY":
-                # print line
+                # This works for TICRA GRASP version before TICRA Tools
                 first, arg, rest = res.partition(":")
                 if first.strip() == "start_frequency":
                     # print rest
@@ -210,6 +213,16 @@ class GraspGrid:
                         freqs.append(float(f.split()[0]))
                     self.freqs = numpy.array(freqs)
                 break
+            elif term.strip().split()[0] == "FREQUENCIES":
+                # This works for TICRA Tools versions > 19.0
+                #
+                # If the frequency list is long, it may spread over more than one line
+                self.freq_unit = term.strip().split()[1].strip("[]")
+                freq_str_list = "  ".join(self.header[l+1:]).split()
+                freqs = []
+                for f in freq_str_list:
+                    freqs.append(float(f))
+                self.freqs = numpy.array(freqs)
 
         # We've now got through the header text and are ready to read the general
         # field type parameters
