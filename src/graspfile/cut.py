@@ -12,14 +12,15 @@ class GraspCut:
         #: str: Cut description
         self.text = ""
 
-        #: int: Cut type
+        #: int: Cut type.
+        #:     Describes the type of cut.
+        #:     No GRASP equivalent
         #:
-        #: No GRASP equivalent
-        #:
-        #: Value signifies the following cut types:
-        #:     :1: Spherical cut
-        #:     :2: Planar or surface cut
-        #:     :3: Cylindrical cut
+        #:     Values signify
+        #:     --------------
+        #:     1 : Spherical cut
+        #:     2 : Planar or surface cut
+        #:     3 : Cylindrical cut
         self.cut_type = 1
 
         #: float: Initial value of variable that cut is swept over
