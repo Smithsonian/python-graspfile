@@ -1,21 +1,30 @@
 # test_graspfile.py
-
+import os
 import pytest
 
 from graspfile import cut, cutfile, grid
 
-test_grid_file = "test_data/grasp_files/square_aperture_7-47mm_square_82-97-112GHz.grd"
+FIXTURE_DIR = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    'test_data',
+)
+
+test_grid_file = pytest.mark.datafiles(os.path.join(FIXTURE_DIR,
+                                                    "/grasp_files/square_aperture_7-47mm_square_82-97-112GHz.grd"))
 """TICRA Tools 19.1 GRASP Grid file, consisting of three grids at 82, 97 and 112 GHz."""
+
 
 @pytest.fixture
 def empty_grasp_grid():
     """Return an empty GraspGrid instance."""
     return grid.GraspGrid()
 
+
 @pytest.fixture
 def grid_file():
     """Return a file object that points to a GRASP Grid file"""
     return open(test_grid_file)
+
 
 @pytest.fixture
 def filled_grasp_grid(empty_grasp_grid, grid_file):
