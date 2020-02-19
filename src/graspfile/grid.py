@@ -167,7 +167,7 @@ class GraspGrid:
         self.igrid = 0
         """int: grid type"""
 
-        self.freqs = None
+        self.freqs = []
         """list: List of frequencies in units of ``freq_unit``"""
 
         self.freq_unit = ""
