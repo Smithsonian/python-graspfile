@@ -84,8 +84,8 @@ class GraspCutFile:
         newcf.constants = self.constants
         for cut_set in self.cut_sets:
             newcs = GraspCutSet()
-            for cut in newcs.cuts:
-                newcs.cuts.append(cut.select_pos_range(pos_min, pos_max))
+            for c in newcs.cuts:
+                newcs.cuts.append(c.select_pos_range(pos_min, pos_max))
             newcf.cut_sets.append(newcs)
 
         return newcf
