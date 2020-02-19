@@ -218,6 +218,8 @@ class GraspGrid:
                 #
                 # If the frequency list is long, it may spread over more than one line
                 self.freq_unit = term.strip().split()[1].strip("[]")
+                #print(self.freq_unit)
+                #print(self.header[l+1:])
                 freq_str_list = "  ".join(self.header[l+1:]).split()
                 freqs = []
                 for f in freq_str_list:
