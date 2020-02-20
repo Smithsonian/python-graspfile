@@ -1,9 +1,10 @@
 # test_graspfile.py
-
+import os
 import pytest
 from pytest import approx
 
 from graspfile import grid
+
 
 test_grid_file = "tests/test_data/grasp_files/square_aperture_7-47mm_square_82-97-112GHz.grd"
 """TICRA Tools 19.1 GRASP Grid file, consisting of three grids at 82, 97 and 112 GHz."""
