@@ -167,7 +167,7 @@ class GraspGrid:
         self.igrid = 0
         """int: grid type"""
 
-        self.freqs = None
+        self.freqs = []
         """list: List of frequencies in units of ``freq_unit``"""
 
         self.freq_unit = ""
@@ -218,6 +218,7 @@ class GraspGrid:
                 #
                 # If the frequency list is long, it may spread over more than one line
                 self.freq_unit = term.strip().split()[1].strip("[]")
+
                 freq_str_list = "  ".join(self.header[l+1:]).split()
                 freqs = []
                 for f in freq_str_list:

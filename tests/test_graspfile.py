@@ -4,13 +4,8 @@ import pytest
 
 from graspfile import cut, cutfile, grid
 
-FIXTURE_DIR = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
-    'test_data',
-)
 
-test_grid_file = pytest.mark.datafiles(os.path.join(FIXTURE_DIR,
-                                                    "/grasp_files/square_aperture_7-47mm_square_82-97-112GHz.grd"))
+test_grid_file = "tests/test_data/grasp_files/square_aperture_7-47mm_square_82-97-112GHz.grd"
 """TICRA Tools 19.1 GRASP Grid file, consisting of three grids at 82, 97 and 112 GHz."""
 
 
