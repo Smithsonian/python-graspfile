@@ -18,21 +18,21 @@ Overview
     :target: https://readthedocs.org/projects/python-graspfile
     :alt: Documentation Status
 
-.. |travis| image:: https://api.travis-ci.org/paulkgrimes/python-graspfile.svg?branch=master
+.. |travis| image:: https://api.travis-ci.org/PaulKGrimes/python-graspfile.svg?branch=master
     :alt: Travis-CI Build Status
-    :target: https://travis-ci.org/paulkgrimes/python-graspfile
+    :target: https://travis-ci.org/PaulKGrimes/python-graspfile
 
-.. |requires| image:: https://requires.io/github/paulkgrimes/python-graspfile/requirements.svg?branch=master
+.. |requires| image:: https://requires.io/github/PaulKGrimes/python-graspfile/requirements.svg?branch=master
     :alt: Requirements Status
-    :target: https://requires.io/github/paulkgrimes/python-graspfile/requirements/?branch=master
+    :target: https://requires.io/github/PaulKGrimes/python-graspfile/requirements/?branch=master
 
-.. |codecov| image:: https://codecov.io/github/paulkgrimes/python-graspfile/coverage.svg?branch=master
+.. |codecov| image:: https://codecov.io/github/PaulKGrimes/python-graspfile/coverage.svg?branch=master
     :alt: Coverage Status
-    :target: https://codecov.io/github/paulkgrimes/python-graspfile
+    :target: https://codecov.io/github/PaulKGrimes/python-graspfile
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/paulkgrimes/python-graspfile/v0.0.1.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/PaulKGrimes/python-graspfile/v0.0.1.svg
     :alt: Commits since latest release
-    :target: https://github.com/paulkgrimes/python-graspfile/compare/v0.0.1...master
+    :target: https://github.com/PaulKGrimes/python-graspfile/compare/v0.0.1...master
 
 
 
@@ -52,7 +52,7 @@ Installation
 
 You can also install the in-development version with::
 
-    pip install https://github.com/paulkgrimes/python-graspfile/archive/master.zip
+    pip install https://github.com/PaulKGrimes/python-graspfile/archive/master.zip
 
 
 Documentation

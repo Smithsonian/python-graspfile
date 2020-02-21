@@ -25,10 +25,10 @@ class GraspCutFile:
 
         self.cut_type = "spherical"
         """str: Describes the type of cut represented in the file.
-            Options are:
-                * ``spherical``: a cut defined on the surface of a sphere
-                * :``planar``: a cut defined on a planar surface or the surface of a reflector
-                * :``cylindrical``: a cut defined on the surface of a cylinder"""
+        Options are:
+            * ``spherical``: a cut defined on the surface of a sphere
+            * :``planar``: a cut defined on a planar surface or the surface of a reflector
+            * :``cylindrical``: a cut defined on the surface of a cylinder"""
 
         self.constants = []
         """list: A list of the constant values for each set of cuts."""

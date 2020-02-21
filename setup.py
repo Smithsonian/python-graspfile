@@ -35,7 +35,7 @@ setup(
     ),
     author='Paul Grimes',
     author_email='pgrimes@cfa.harvard.edu',
-    url='https://github.com/paulkgrimes/python-graspfile',
+    url='https://github.com/PaulKGrimes/python-graspfile',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
@@ -68,7 +68,7 @@ setup(
     project_urls={
         'Documentation': 'https://python-graspfile.readthedocs.io/',
         'Changelog': 'https://python-graspfile.readthedocs.io/en/latest/changelog.html',
-        'Issue Tracker': 'https://github.com/paulkgrimes/python-graspfile/issues',
+        'Issue Tracker': 'https://github.com/PaulKGrimes/python-graspfile/issues',
     },
     keywords=[
         # eg: 'keyword1', 'keyword2', 'keyword3',
