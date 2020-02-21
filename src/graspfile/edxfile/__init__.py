@@ -1,1 +1,1 @@
-__all__ = ['EdxFile', 'RadiationPattern', 'ApertureField']
+__all__ = ['edx_file.py', 'radiation_pattern.py', 'aperture_field.py']

@@ -1,7 +1,8 @@
 """This is the module for manipulating individual cuts from TICRA Tools, GRASP and CHAMP cutfiles
 """
 
-import numpy, math
+import numpy
+import math
 
 
 class GraspCut:
@@ -115,11 +116,11 @@ class GraspCut:
         # Parse lines
         for i in range(self.v_num):
             self.data[i]['pos'] = self.v_ini + self.v_inc * i
-            l = lines[i].split()
-            self.data[i]['f1'] = complex(float(l[0]), float(l[1]))
-            self.data[i]['f2'] = complex(float(l[2]), float(l[3]))
+            lline = lines[i].split()
+            self.data[i]['f1'] = complex(float(lline[0]), float(lline[1]))
+            self.data[i]['f2'] = complex(float(lline[2]), float(lline[3]))
             if self.field_components == 3:
-                self.data[i]['f3'] = complex(float(l[4]), float(l[5]))
+                self.data[i]['f3'] = complex(float(lline[4]), float(lline[5]))
 
     def write(self):
         """Write local arrays to disk in GRASP cut file format"""

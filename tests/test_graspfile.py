@@ -1,5 +1,5 @@
 # test_graspfile.py
-import os
+
 import pytest
 from pytest import approx
 
@@ -45,14 +45,20 @@ def test_loading_grid(filled_grasp_grid):
     # Check that parameters were read correctly
     assert filled_grasp_grid.ktype in [1]
     assert type(filled_grasp_grid.nset) is int
-    assert filled_grasp_grid.icomp in [1,2,3]
+    assert filled_grasp_grid.icomp in range(1,10)
     assert filled_grasp_grid.ncomp in [2,3]
-    assert filled_grasp_grid.igrid in [1,2,3]
+    assert filled_grasp_grid.igrid in range(1,3)
 
     # Check that beam centers were read correctly
-    assert len(filled_grasp_grid.beam_centers) == 3
+    assert len(filled_grasp_grid.beam_centers) > 0
     for bc in filled_grasp_grid.beam_centers:
         assert len(bc) == 2
+
+def test_rotate_grid_polarization(filled_grasp_grid):
+    """Check that rotate_polarization runs on all fields"""
+    filled_grasp_grid.rotate_polarization()
+    filled_grasp_grid.rotate_polarization(angle=-45.0)
+
 
 
 def test_loading_field(filled_grasp_field):
@@ -88,4 +94,39 @@ def test_loading_field(filled_grasp_field):
     assert field_shape[2] == filled_grasp_field.ncomp
 
 
+def test_index_radial_dist(filled_grasp_field):
+    """Test the return of an array of radial distances of grid points"""
+    rdist = filled_grasp_field.index_radial_dist(3,2)
+
+    assert type(rdist) is float
+    assert rdist >= 0.0
+
+
+def test_grid_pos(filled_grasp_field):
+    """Test the return of the meshed grid of positions"""
+    xgrid, ygrid = filled_grasp_field.grid_pos()
+
+    assert xgrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
+    assert ygrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
+
+
+def test_radius_grid(filled_grasp_field):
+    rgrid = filled_grasp_field.radius_grid()
+
+    assert rgrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
+
+    rgrid2 = filled_grasp_field.radius_grid((0.1, 0.1))
+
+    assert rgrid2.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
+
+
+def test_rotate_polarization(filled_grasp_field):
+    ang = 180.0
+
+    rotField = filled_grasp_field
+
+    rotField.rotate_polarization(ang)
+    rotField.rotate_polarization(ang)
+
+    assert rotField.field == approx(filled_grasp_field.field)
 

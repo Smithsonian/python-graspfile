@@ -233,23 +233,24 @@ class GraspTorObject(OrderedDict):
         #     raise ValueError("Unknown type for a GraspTorObject")
         self._type = new_type
 
+
 class GraspTorFile(OrderedDict):
     """A container for objects read from a tor file.  Subclasses OrderedDict to provide a dict of torObjects
      keyed by name, and sorted by insertion order"""
 
-    def __init__(self, fileLike=None):
+    def __init__(self, file_like=None):
         """Create a TorFile object, and if fileLike is specified, read the file"""
         OrderedDict.__init__(self)
         self._parser = torparser.tor_file
-        if fileLike:
-            self.read(fileLike)
+        if file_like:
+            self.read(file_like)
 
-    def read(self, fileLike):
+    def read(self, file_like):
         """Read a list of torObjects and torComments from a fileLike object.  We use pyparsing.ParserElement's parseFile
         method, which can take either a file-like object or a filename to open.  If you wish to parse an existing string
         object, used StringIO to supply a file-like object containing the string."""
         # Parse the file
-        res = self._parser.parseFile(fileLike)
+        res = self._parser.parseFile(file_like)
 
         # Turn the parse results into objects
         self.fill(res)
