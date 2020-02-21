@@ -1,7 +1,8 @@
 """pyparsing parser for GRASP .tor files"""
 
-from pyparsing import Suppress, Word, alphas, alphanums
 import pprint
+
+from pyparsing import *
 
 tor_bnf = """
 file

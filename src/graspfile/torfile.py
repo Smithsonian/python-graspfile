@@ -1,7 +1,8 @@
 """A class to hold a parsed GRASP Tor File in a collection of objects"""
 
-import graspfile.torparser as torparser
 from collections import OrderedDict
+
+import graspfile.torparser as torparser
 
 _debug_ = True
 
