@@ -95,8 +95,6 @@ def test_loading_field(filled_grasp_field):
 def test_index_radial_dist(filled_grasp_field):
     """Test the return of an array of radial distances of grid points"""
     rdist = filled_grasp_field.index_radial_dist(3,2)
-
-    assert type(rdist) is float
     assert rdist >= 0.0
 
 
