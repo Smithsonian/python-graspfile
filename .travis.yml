@@ -41,7 +41,6 @@ install:
   - tox --version
 script:
   - tox -v
-  - coverage run tests.py
 after_success:
   - codecov
 after_failure:
