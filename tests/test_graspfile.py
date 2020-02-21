@@ -43,9 +43,9 @@ def test_loading_grid(filled_grasp_grid):
     # Check that parameters were read correctly
     assert filled_grasp_grid.ktype in [1]
     assert type(filled_grasp_grid.nset) is int
-    assert filled_grasp_grid.icomp in range(1,10)
+    assert filled_grasp_grid.icomp in range(1,12)
     assert filled_grasp_grid.ncomp in [2,3]
-    assert filled_grasp_grid.igrid in range(1,3)
+    assert filled_grasp_grid.igrid in [2,3,8]
 
     # Check that beam centers were read correctly
     assert len(filled_grasp_grid.beam_centers) > 0
