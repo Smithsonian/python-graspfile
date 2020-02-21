@@ -7,6 +7,7 @@ source =
 branch = true
 source =
     graspfile
+omit = *tests*
 parallel = true
 
 [report]
