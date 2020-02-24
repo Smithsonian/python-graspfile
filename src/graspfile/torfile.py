@@ -87,7 +87,7 @@ class GraspTorMember:
 
     @property
     def unit(self):
-        """Short circuit through torValue to supply tV.unit if appropriate, else retun None"""
+        """Short circuit through torValue to supply tV.unit if appropriate, else return None"""
         if self._type == "value":
             return self._value.unit
         else:
@@ -103,8 +103,8 @@ class GraspTorMember:
     def __getitem__(self, key):
         return self.value[key].value
 
-    def __setitem__(self, key, newValue):
-        self.value[key].value = newValue
+    def __setitem__(self, key, new_value):
+        self.value[key].value = new_value
 
 
 class GraspTorRef:

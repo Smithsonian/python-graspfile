@@ -1,4 +1,4 @@
-# test_graspfile.py
+# test_grid.py
 
 import pytest
 from graspfile import grid
