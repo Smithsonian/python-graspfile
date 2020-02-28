@@ -110,9 +110,9 @@ class GraspCut:
 
         # Create the numpy structured array for the data
         if self.field_components == 3:
-            self.data = numpy.zeros((self.v_num), dtype=([('pos', 'f4'), ('f1', 'c8'), ('f2', 'c8'), ('f3', 'c8')]))
+            self.data = numpy.zeros(self.v_num, dtype=([('pos', 'f4'), ('f1', 'c8'), ('f2', 'c8'), ('f3', 'c8')]))
         else:  # self.field_components == 2:
-            self.data = numpy.zeros((self.v_num), dtype=([('pos', 'f4'), ('f1', 'c8'), ('f2', 'c8')]))
+            self.data = numpy.zeros(self.v_num, dtype=([('pos', 'f4'), ('f1', 'c8'), ('f2', 'c8')]))
 
         # Parse lines
         for i in range(self.v_num):

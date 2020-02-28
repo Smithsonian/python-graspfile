@@ -160,9 +160,9 @@ if __name__ == "__main__":
     pprint.pprint(res.asDict())
 
     print("\nTest Members")
-    memberTest = """x : 0.0 mm, y : 0.0 mm, z : 0.0 mm
+    member_test = """x : 0.0 mm, y : 0.0 mm, z : 0.0 mm
 """
-    print(memberTest)
+    print(member_test)
     res = tor_members.parseString(member_test)
     pprint.pprint(res.asList())
     pprint.pprint(res.asDict())

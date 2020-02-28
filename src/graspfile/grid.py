@@ -177,7 +177,7 @@ class GraspGrid:
         """list of (:obj:`GraspField`): List of individual fields in file,"""
 
         self.beam_centers = []
-        """list: list of beam centers for invidual fields in the file."""
+        """list: list of beam centers for individual fields in the file."""
 
     def read_grasp_grid(self, fi):
         """Reads GRASP output grid files from file object and fills a number of variables

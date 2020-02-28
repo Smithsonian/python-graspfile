@@ -44,6 +44,9 @@ class GraspTorMember:
         #: str: The name of the member of a GraspTorObject
         self.name = None
 
+        #: str: The type of the member
+        self._type = None
+
         #: various GraspTor values: The value of the Member parameter
         self._value = None
         if tor_member:
@@ -54,18 +57,23 @@ class GraspTorMember:
             print("GraspTorMember.fill received: {:}".format(tor_member))
 
         self.name = tor_member[0]
-        if tor_member._type == "struct":
+        if tor_member.type == "struct":
             self._value = GraspTorStruct(tor_member[1:])
             self._type = "struct"
-        elif tor_member._type == "ref":
+        elif tor_member.type == "ref":
             self._value = GraspTorRef(tor_member[1:])
             self._type = "ref"
-        elif tor_member._type == "sequence":
+        elif tor_member.type == "sequence":
             self._value = GraspTorSequence(tor_member[1:])
             self._type = "sequence"
         else:
             self._value = GraspTorValue(tor_member[1:])
             self._type = "value"
+
+    @property
+    def type(self):
+        """Return the type of the GraspTorMember"""
+        return self._type
 
     @property
     def value(self):
@@ -125,6 +133,7 @@ class GraspTorRef:
 
 class GraspTorSequence(list):
     """A container for a value that is a sequence of GraspTorValues."""
+
     def __init__(self, tor_seq=None):
         super().__init__()
         if tor_seq:
@@ -141,6 +150,7 @@ class GraspTorSequence(list):
 class GraspTorStruct(OrderedDict):
     """A container for a GraspTorStruct, that has a number of members.  Members are
     stored as an OrderedDict."""
+
     def __init__(self, tor_struct=None):
         OrderedDict.__init__(self)
         if tor_struct:
@@ -163,6 +173,9 @@ class GraspTorComment:
         #: str: Name of comment object
         self.name = None
 
+        #: str: The type of the object
+        self._type = "comment"
+
         #: str: Test of the comment object
         self.text = None
 
@@ -177,6 +190,11 @@ class GraspTorComment:
         self.name = tor_comment.name
         self.location = int(tor_comment.name.lstrip("comment"))
         self.text = tor_comment.text
+
+    @property
+    def type(self):
+        """Return the type of the comment object as "commment"."""
+        return self._type
 
 
 class GraspTorObject(OrderedDict):
@@ -205,8 +223,8 @@ class GraspTorObject(OrderedDict):
         if _debug_:
             print("GraspTorObject.fill received: {:}".format(tor_obj))
 
-        self._name = tor_obj._name
-        self._type = tor_obj._type
+        self._name = tor_obj.name
+        self._type = tor_obj.type
         for r in tor_obj[2:]:
             self[r[0]] = GraspTorMember(r)
 
@@ -256,20 +274,10 @@ class GraspTorFile(OrderedDict):
         # Turn the parse results into objects
         self.fill(res)
 
-    def fill(self, torFile):
+    def fill(self, tor_file):
         """Fill the GraspTorFile using the parser results in torFile"""
-        for r in torFile:
-            if r._type == "comment":
-                self[r._name] = GraspTorComment(r)
+        for r in tor_file:
+            if r.type == "comment":
+                self[r.name] = GraspTorComment(r)
             else:
-                self[r._name] = GraspTorObject(r)
-
-
-if __name__ == "__main__":
-    import StringIO
-
-    testFile = StringIO.StringIO(torparser.test_str)
-
-    gtf = GraspTorFile(testFile)
-
-    print(gtf)
+                self[r.name] = GraspTorObject(r)
