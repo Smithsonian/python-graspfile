@@ -31,13 +31,12 @@ def filled_grasp_cut_file(empty_grasp_cutfile, cut_file):
 @pytest.fixture
 def filled_grasp_cut(filled_grasp_cut_file):
     """Return a GraspField instance from the filled_grasp_grid fixture"""
-    return filled_grasp_cut_file.cut_sets.cuts[0]
+    return filled_grasp_cut_file.cut_sets[0].cuts[0]
 
 
 def test_loading_cut_file(filled_grasp_cut_file):
     """Test loading cut from a TICRA Cut file."""
     # check that enough frequencies and fields were read
-    assert len(filled_grasp_cut_file.filename) > 0
     assert len(filled_grasp_cut_file.cut_sets[0].cuts) > 0
 
     # Check that parameters were read correctly
@@ -47,6 +46,8 @@ def test_loading_cut_file(filled_grasp_cut_file):
 
 def test_select_pos_range_file(filled_grasp_cut_file):
     """Check that returning a sub range works"""
+    filled_grasp_cut = filled_grasp_cut_file.cut_sets[0].cuts[0]
+
     v_min = filled_grasp_cut.v_ini
     v_max = filled_grasp_cut.v_ini + \
         (filled_grasp_cut.v_num - 1) * filled_grasp_cut.v_inc
@@ -71,48 +72,14 @@ def test_loading_cut(filled_grasp_cut):
     assert type(filled_grasp_cut.v_num) is int
 
     assert filled_grasp_cut.cut_type in range(1, 4)
-    assert filled_grasp_cut.constant is float
+    assert type(filled_grasp_cut.constant) is float
     assert filled_grasp_cut.icut in range(1, 3)
     assert filled_grasp_cut.polarization in range(1, 10)
     assert filled_grasp_cut.field_components in [2, 3]
 
     # Check that the shape of the field is consistent with grid parameters
     data_shape = filled_grasp_cut.data.shape
+    data_comps = len(filled_grasp_cut.data.dtype.names)
 
     assert data_shape[0] == filled_grasp_cut.v_num
-    assert data_shape[1] == filled_grasp_cut.field_components + 1
-
-
-def test_index_radial_dist(filled_grasp_field):
-    """Test the return of an array of radial distances of grid points"""
-    rdist = filled_grasp_field.index_radial_dist(3, 2)
-    assert rdist >= 0.0
-
-
-def test_grid_pos(filled_grasp_field):
-    """Test the return of the meshed grid of positions"""
-    xgrid, ygrid = filled_grasp_field.grid_pos()
-
-    assert xgrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
-    assert ygrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
-
-
-def test_radius_grid(filled_grasp_field):
-    rgrid = filled_grasp_field.radius_grid()
-
-    assert rgrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
-
-    rgrid2 = filled_grasp_field.radius_grid((0.1, 0.1))
-
-    assert rgrid2.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
-
-
-def test_rotate_polarization(filled_grasp_field):
-    ang = 180.0
-
-    rot_field = filled_grasp_field
-
-    rot_field.rotate_polarization(ang)
-    rot_field.rotate_polarization(-ang)
-
-    assert rot_field.field == approx(filled_grasp_field.field)
+    assert data_comps == filled_grasp_cut.field_components + 1

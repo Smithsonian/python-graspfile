@@ -2,6 +2,7 @@
 """
 
 import math
+
 import numpy
 
 
@@ -178,10 +179,7 @@ class GraspCut:
     output cut files"""
 
     def __init__(self):
-        self.filename = ""
-        """str: The filename the cuts were read from"""
-
-        self.cut_sets = [GraspCutSet()]
+        self.cut_sets = []
         """list: List of :class:`.GraspCutSet`, each representing a set of cuts within the file"""
 
         self.cut_type = "spherical"
@@ -194,17 +192,16 @@ class GraspCut:
         self.constants = []
         """list: A list of the constant values for each set of cuts."""
 
-    def read(self, filename):
-        """Open filename, read the contents and parse into cut objects"""
-        self.filename = filename
-        file = open(self.filename)
-        text = file.readlines()
+    def read(self, fi):
+        """Read the contents from filelike fi and parse into cut objects"""
+        text = fi.readlines()
 
         self.constants = []
         # Constants contains a list of constants (typically phi angles)
         # When values are repeated, it indicates that a second set of cuts is
         # in the file
 
+        self.cut_sets.append(GraspCutSet())
         cut_set = 0
         temp_text = []
         # Read through the file, splitting the lines into separate cuts
@@ -234,18 +231,15 @@ class GraspCut:
             self.cut_sets[cut_set].cuts.append(new_cut)
             self.constants.append(new_cut.constant)
 
-        file.close()
-
     def select_pos_range(self, pos_min, pos_max):
         """Return a new cut file object containing only the parts of
         each cut between pos_min and pos_max inclusive"""
         newcf = GraspCut()
-        newcf.filename = self.filename
         newcf.cut_type = "spherical"
         newcf.constants = self.constants
         for cut_set in self.cut_sets:
             newcs = GraspCutSet()
-            for c in newcs.cuts:
+            for c in cut_set.cuts:
                 newcs.cuts.append(c.select_pos_range(pos_min, pos_max))
             newcf.cut_sets.append(newcs)
 
