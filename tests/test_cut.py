@@ -1,7 +1,7 @@
 # test_grid.py
 
 import pytest
-from graspfile import cutfile
+from graspfile import cut
 from pytest import approx
 
 test_cut_file = "tests/test_data/grasp_files/horn_lens.cut"
@@ -11,7 +11,7 @@ test_cut_file = "tests/test_data/grasp_files/horn_lens.cut"
 @pytest.fixture
 def empty_grasp_cutfile():
     """Return an empty  instance."""
-    return cutfile.GraspCutFile()
+    return cut.GraspCut()
 
 
 @pytest.fixture

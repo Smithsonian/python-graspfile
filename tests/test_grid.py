@@ -43,20 +43,20 @@ def test_loading_grid(filled_grasp_grid):
     # Check that parameters were read correctly
     assert filled_grasp_grid.ktype in [1]
     assert type(filled_grasp_grid.nset) is int
-    assert filled_grasp_grid.icomp in range(1,12)
-    assert filled_grasp_grid.ncomp in [2,3]
-    assert filled_grasp_grid.igrid in [2,3,8]
+    assert filled_grasp_grid.icomp in range(1, 12)
+    assert filled_grasp_grid.ncomp in [2, 3]
+    assert filled_grasp_grid.igrid in [2, 3, 8]
 
     # Check that beam centers were read correctly
     assert len(filled_grasp_grid.beam_centers) > 0
     for bc in filled_grasp_grid.beam_centers:
         assert len(bc) == 2
 
+
 def test_rotate_grid_polarization(filled_grasp_grid):
     """Check that rotate_polarization runs on all fields"""
     filled_grasp_grid.rotate_polarization()
     filled_grasp_grid.rotate_polarization(angle=-45.0)
-
 
 
 def test_loading_field(filled_grasp_field):
@@ -77,9 +77,10 @@ def test_loading_field(filled_grasp_field):
 
     # Check that the step values are consistent with the other grid parameters
     # (should find and use the "approx equal" test)
-    assert filled_grasp_field.grid_step_x == approx((filled_grasp_field.grid_max_x - filled_grasp_field.grid_min_x)/(filled_grasp_field.grid_n_x - 1))
+    assert filled_grasp_field.grid_step_x == approx(
+        (filled_grasp_field.grid_max_x - filled_grasp_field.grid_min_x) / (filled_grasp_field.grid_n_x - 1))
     assert filled_grasp_field.grid_step_y == approx((filled_grasp_field.grid_max_y - filled_grasp_field.grid_min_y) / (
-            filled_grasp_field.grid_n_y - 1))
+        filled_grasp_field.grid_n_y - 1))
 
     assert filled_grasp_field.k_limit in [0, 1]
     assert filled_grasp_field.ncomp in [2, 3]
@@ -94,7 +95,7 @@ def test_loading_field(filled_grasp_field):
 
 def test_index_radial_dist(filled_grasp_field):
     """Test the return of an array of radial distances of grid points"""
-    rdist = filled_grasp_field.index_radial_dist(3,2)
+    rdist = filled_grasp_field.index_radial_dist(3, 2)
     assert rdist >= 0.0
 
 
@@ -119,10 +120,9 @@ def test_radius_grid(filled_grasp_field):
 def test_rotate_polarization(filled_grasp_field):
     ang = 180.0
 
-    rotField = filled_grasp_field
+    rot_field = filled_grasp_field
 
-    rotField.rotate_polarization(ang)
-    rotField.rotate_polarization(ang)
+    rot_field.rotate_polarization(ang)
+    rot_field.rotate_polarization(ang)
 
-    assert rotField.field == approx(filled_grasp_field.field)
-
+    assert rot_field.field == approx(filled_grasp_field.field)
