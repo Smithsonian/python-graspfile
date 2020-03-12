@@ -99,20 +99,20 @@ def test_index_radial_dist(filled_grasp_field):
     assert rdist >= 0.0
 
 
-def test_grid_pos(filled_grasp_field):
+def test_grid_mesh(filled_grasp_field):
     """Test the return of the meshed grid of positions"""
-    xgrid, ygrid = filled_grasp_field.grid_pos()
+    xgrid, ygrid = filled_grasp_field.get_grid_mesh()
 
     assert xgrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
     assert ygrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
 
 
 def test_radius_grid(filled_grasp_field):
-    rgrid = filled_grasp_field.radius_grid()
+    rgrid = filled_grasp_field.get_grid_radius()
 
     assert rgrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
 
-    rgrid2 = filled_grasp_field.radius_grid((0.1, 0.1))
+    rgrid2 = filled_grasp_field.get_grid_radius((0.1, 0.1))
 
     assert rgrid2.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
 

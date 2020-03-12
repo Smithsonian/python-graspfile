@@ -2,6 +2,7 @@
 """
 
 import numpy
+from graspfile import numpy_utilities as nu
 
 
 class GraspField:
@@ -118,19 +119,41 @@ class GraspField:
 
         return numpy.sqrt(off_x ** 2 + off_y ** 2)
 
-    def grid_pos(self):
+    def get_grid_mesh(self):
         """Return meshed grids of the x and y positions of each point in the field"""
         return numpy.meshgrid(numpy.linspace(self.grid_min_x, self.grid_max_x, self.grid_n_x),
                               numpy.linspace(self.grid_min_y, self.grid_max_y, self.grid_n_y))
 
-    def radius_grid(self, center=None):
+    def get_grid_pos(self):
+        """Return 1d arrays of the position values in the field."""
+        x_vals = numpy.linspace(self.grid_min_x, self.grid_max_x, self.grid_n_x)
+        y_vals = numpy.linspace(self.grid_min_y, self.grid_max_y, self.grid_n_y)
+        return x_vals, y_vals
+
+    def get_grid_radius(self, center=None):
         """Return an array holding the radii of each point from the beam centre"""
-        grid_x, grid_y = self.grid_pos()
+        grid_x, grid_y = self.get_grid_mesh()
 
         if center is None:
             center = self.beam_center
 
         return numpy.sqrt((grid_x - center[0]) ** 2 + (grid_y - center[1]) ** 2)
+
+    def get_value(self, x_pos, y_pos):
+        """Return the value of the field at an x and y position. Finds the closest value to the requested x and y and
+        returns the value.
+
+        Arguments:
+            x_pos float: x position of the value in the grid.
+            y_pos float: y position of the value in the grid.
+
+        Returns:
+            field value numpy.array: array containing the complex field components at (x_pos, y_pos)"""
+        x_vals, y_vals = self.get_grid_pos()
+        nx = nu.find_nearest_idx(x_vals, x_pos)
+        ny = nu.find_nearest_idx(y_vals, y_pos)
+
+        return self.field[nx, ny,:]
 
     def rotate_polarization(self, angle=45.0):
         """Rotate the basis of the polarization by <angle>"""
@@ -219,7 +242,7 @@ class GraspGrid:
                 # If the frequency list is long, it may spread over more than one line
                 self.freq_unit = term.strip().split()[1].strip("[]")
 
-                freq_str_list = "  ".join(self.header[l+1:]).split()
+                freq_str_list = "  ".join(self.header[l + 1:]).split()
                 freqs = []
                 for f in freq_str_list:
                     freqs.append(float(f))
