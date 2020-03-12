@@ -95,7 +95,8 @@ class GraspSingleCut:
         """Read cut from lines of text and parse as a cut, filing the
         parameters and data"""
         # Get the text descriptor and pop it off the front
-        self.text = lines.pop(0)
+        # self.text = lines.pop(0) # Now send spec line first - descriptive text not always present
+        print(lines)
 
         # Get the specification of the cut and parse it
         specline = lines.pop(0)
@@ -176,7 +177,14 @@ class GraspCutSet:
 
 class GraspCut:
     """Class for reading, holding, manipulating and writing GRASP 9.3 format
-    output cut files"""
+    output cut files.
+
+    A file may contain multiple sets of cuts (e.g. at different frequencies), with each set having several cuts with
+    varying constant coordinate value (e.g. phi in a theta-phi grid).
+
+    It's common for GRASP cut files to not contain information on the distinguishing parameter between cut sets,
+    particular for cut file output from CHAMP calculations.  The user will have to supply this information, by e.g.
+    creating a ``.frequencies`` list as an attributes to this object that stores the necessary information."""
 
     def __init__(self):
         self.cut_sets = []
@@ -186,11 +194,11 @@ class GraspCut:
         """str: Describes the type of cut represented in the file.
         Options are:
             * ``spherical``: a cut defined on the surface of a sphere
-            * :``planar``: a cut defined on a planar surface or the surface of a reflector
-            * :``cylindrical``: a cut defined on the surface of a cylinder"""
+            * ``planar``: a cut defined on a planar surface or the surface of a reflector
+            * ``cylindrical``: a cut defined on the surface of a cylinder"""
 
         self.constants = []
-        """list: A list of the constant values for each set of cuts."""
+        """list: A list of the constant values for each cut in each of the sets of cuts."""
 
     def read(self, fi):
         """Read the contents from filelike fi and parse into cut objects"""
@@ -206,7 +214,8 @@ class GraspCut:
         temp_text = []
         # Read through the file, splitting the lines into separate cuts
         for line in text:
-            if line[0:5] == "Field":
+            #if line[0:5] == "Field": # this test is wrong
+            if len(line.split()) == 7:
                 # We have the start of a new cut
                 # Have we already collected a cut?
                 if temp_text:
@@ -222,7 +231,8 @@ class GraspCut:
                     self.constants.append(new_cut.constant)
                     temp_text = []
 
-            temp_text.append(line)
+            if len(line.strip()) > 0 :
+                temp_text.append(line)
 
         # Append the last cut to the file
         if temp_text:
