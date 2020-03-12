@@ -214,7 +214,6 @@ class GraspCut:
         temp_text = []
         # Read through the file, splitting the lines into separate cuts
         for line in text:
-            #if line[0:5] == "Field": # this test is wrong
             if len(line.split()) == 7:
                 # We have the start of a new cut
                 # Have we already collected a cut?
@@ -231,7 +230,7 @@ class GraspCut:
                     self.constants.append(new_cut.constant)
                     temp_text = []
 
-            if len(line.strip()) > 0 :
+            if len(line.strip()) > 0:
                 temp_text.append(line)
 
         # Append the last cut to the file
