@@ -153,7 +153,7 @@ class GraspField:
         nx = nu.find_nearest_idx(x_vals, x_pos)
         ny = nu.find_nearest_idx(y_vals, y_pos)
 
-        return self.field[nx, ny,:]
+        return self.field[nx, ny, :]
 
     def rotate_polarization(self, angle=45.0):
         """Rotate the basis of the polarization by <angle>"""

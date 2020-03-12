@@ -11,13 +11,13 @@
 
 from lxml import etree
 import numpy as np
-import NumpyUtility as nu
+from graspfile import numpy_utilities as nu
 from io import StringIO, IOBase
 
 from matplotlib import pyplot as pp
 
 
-class ApertureField:
+class ApertureField(object):
     """Class to parse and hold data from a CHAMP .edx output file."""
     def __init__(self, file_like=None):
         """Create a ApertureField object, reading and parsing from <file>.
@@ -25,6 +25,21 @@ class ApertureField:
         if file not given, create empty object to be filled with .read, etc."""
         #: bool: Flag to prevent errors from calling methods on objects with no data
         self.__ready = False
+
+        self._tree = None
+        self._root = None
+
+        self._shape = None
+
+        self.n_components = 0
+        self.component_type = None
+        self.n_phi = 0
+        self.phi = None
+        self.z = None
+        self.rho = None
+        self.frequency = None
+
+        self._aperture_field = None
 
         if file_like:
             self.read(file_like)
@@ -72,7 +87,7 @@ class ApertureField:
             '{http://www.edi-forum.org}Declarations/'
             '{http://www.edi-forum.org}Folder/'
             '{http://www.edi-forum.org}Variable[@Name="PlaneCut_ProjectionComponents"]'
-            ).attrib["Class"].split(':')[1]
+        ).attrib["Class"].split(':')[1]
 
         # Read the phi cut values
         self.n_phi = int(self._root.find(
@@ -189,7 +204,7 @@ class ApertureField:
         new_rho = self.rho[int((len(self.rho)) / 2):]
         new_phi = np.concatenate((self.phi[:], self.phi[1:] + 180))
         new_ap_field = np.concatenate((self._aperture_field[:, int(len(self.rho) / 2):, :, :, :],
-                                     self._aperture_field[:, int(len(self.rho) / 2)::-1, :, 1:, :]), axis=3)
+                                       self._aperture_field[:, int(len(self.rho) / 2)::-1, :, 1:, :]), axis=3)
         self.rho = new_rho
         self.phi = new_phi
         self.n_phi = len(new_phi)
