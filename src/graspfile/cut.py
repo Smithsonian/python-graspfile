@@ -83,21 +83,13 @@ class GraspSingleCut:
                 * `3`: for near field.  3rd component is always E_z"""
 
         self.data = numpy.ndarray((0, 0))
-        """numpy.ndarray: Cut Data as complex array of field components
+        """numpy.ndarray: Cut Data as complex array of field components.
 
-        named columns are:
-            * 0: 'pos' : position coordinate
-            * 1: 'f1'  : first field component
-            * 2: 'f2'  : second field component
-            * 3: 'f3'  : third field component if `self.field_components` equals 3."""
+        Shape of array is ``(v_num, field_components)``"""
 
     def read(self, lines):
         """Read cut from lines of text and parse as a cut, filing the
         parameters and data"""
-        # Get the text descriptor and pop it off the front
-        # self.text = lines.pop(0) # Now send spec line first - descriptive text not always present
-        print(lines)
-
         # Get the specification of the cut and parse it
         specline = lines.pop(0)
         specs = specline.split()
@@ -110,19 +102,21 @@ class GraspSingleCut:
         self.field_components = int(specs[6])
 
         # Create the numpy structured array for the data
-        if self.field_components == 3:
-            self.data = numpy.zeros(self.v_num, dtype=([('pos', 'f4'), ('f1', 'c8'), ('f2', 'c8'), ('f3', 'c8')]))
-        else:  # self.field_components == 2:
-            self.data = numpy.zeros(self.v_num, dtype=([('pos', 'f4'), ('f1', 'c8'), ('f2', 'c8')]))
+        self.data = numpy.zeros((self.v_num, self.field_components), dtype=complex)
 
         # Parse lines
         for i in range(self.v_num):
-            self.data[i]['pos'] = self.v_ini + self.v_inc * i
             lline = lines[i].split()
-            self.data[i]['f1'] = complex(float(lline[0]), float(lline[1]))
-            self.data[i]['f2'] = complex(float(lline[2]), float(lline[3]))
+            self.data[i, 0] = complex(float(lline[0]), float(lline[1]))
+            self.data[i, 1] = complex(float(lline[2]), float(lline[3]))
             if self.field_components == 3:
-                self.data[i]['f3'] = complex(float(lline[4]), float(lline[5]))
+                self.data[i, 2] = complex(float(lline[4]), float(lline[5]))
+
+    @property
+    def pos(self):
+        """``numpy.array``: the positions of the data points in the cut file"""
+        indices = numpy.arange(self.v_num, dtype=float)
+        return self.v_ini + self.v_inc*indices
 
     def write(self):
         """Write local arrays to disk in GRASP cut file format"""
@@ -149,19 +143,19 @@ class GraspSingleCut:
         i_min = 0
         i_max = self.data.shape[0]
         for d in range(self.data.shape[0]):
-            if self.data[d]['pos'] >= pos_min:
+            if self.pos[d] >= pos_min:
                 if i_min == 0:
                     i_min = d
-            if self.data[d]['pos'] >= pos_max:
+            if self.pos[d] >= pos_max:
                 if i_max > d:
                     i_max = d
 
         # Set v_ini and v_num
-        output.v_ini = self.data[i_min]['pos']
+        output.v_ini = self.pos[i_min]
         output.v_num = i_max - i_min + 1
 
         # Set data
-        output.data = self.data[i_min:i_max]
+        output.data = self.data[i_min:i_max, :]
 
         return output
 

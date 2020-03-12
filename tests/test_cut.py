@@ -79,7 +79,6 @@ def test_loading_cut(filled_grasp_cut):
 
     # Check that the shape of the field is consistent with grid parameters
     data_shape = filled_grasp_cut.data.shape
-    data_comps = len(filled_grasp_cut.data.dtype.names)
 
     assert data_shape[0] == filled_grasp_cut.v_num
-    assert data_comps == filled_grasp_cut.field_components + 1
+    assert data_shape[1] == filled_grasp_cut.field_components
