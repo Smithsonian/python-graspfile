@@ -44,7 +44,7 @@ default_context:
     project_name:              'python-graspfile'
     project_short_description: 'A package for reading, manipulating and eventually writing files output from TICRA Tools GRASP and CHAMP software using numpy etc.'
     pypi_badge:                'no'
-    pypi_disable_upload:       'yes'
+    pypi_disable_upload:       'no'
     release_date:              'today'
     repo_hosting:              'github.com'
     repo_hosting_domain:       'github.com'
