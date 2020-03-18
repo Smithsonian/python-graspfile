@@ -96,8 +96,11 @@ class GraspSingleCut:
 
         # Make sure a stray comment line hasn't made it in at the start
         if specs[0] == "Field":
-            specline = lines.pop(0)
-            specs = specline.split()
+            if len(lines) != 0:
+                specline = lines.pop(0)
+                specs = specline.split()
+            else:
+                return
 
         self.v_ini = float(specs[0])
         self.v_inc = float(specs[1])
