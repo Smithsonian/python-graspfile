@@ -30,9 +30,9 @@ Overview
     :alt: Coverage Status
     :target: https://codecov.io/github/PaulKGrimes/python-graspfile
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/PaulKGrimes/python-graspfile/v0.1.2.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/PaulKGrimes/python-graspfile/v0.1.3.svg
     :alt: Commits since latest release
-    :target: https://github.com/PaulKGrimes/python-graspfile/compare/v0.1.2...master
+    :target: https://github.com/PaulKGrimes/python-graspfile/compare/v0.1.3...master
 
 
 
