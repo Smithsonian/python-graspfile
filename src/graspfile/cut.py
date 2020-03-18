@@ -222,7 +222,7 @@ class GraspCut:
             if len(line.split()) == 7:
                 # We have the start of a new cut
                 # Have we already collected a cut?
-                if temp_text:
+                if len(temp_text) > 2:
                     # Create new cut
                     new_cut = GraspSingleCut()
                     new_cut.read(temp_text)
