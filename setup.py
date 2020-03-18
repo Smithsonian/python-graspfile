@@ -63,7 +63,6 @@ setup(
         # 'Programming Language :: Python :: Implementation :: Jython',
         # 'Programming Language :: Python :: Implementation :: Stackless',
         'Topic :: Utilities',
-        'Private :: Do Not Upload',
     ],
     project_urls={
         'Documentation': 'https://python-graspfile.readthedocs.io/',
