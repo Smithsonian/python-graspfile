@@ -93,6 +93,12 @@ class GraspSingleCut:
         # Get the specification of the cut and parse it
         specline = lines.pop(0)
         specs = specline.split()
+
+        # Make sure a stray comment line hasn't made it in at the start
+        if specs[0] == "Field":
+            specline = lines.pop(0)
+            specs = specline.split()
+
         self.v_ini = float(specs[0])
         self.v_inc = float(specs[1])
         self.v_num = int(specs[2])
@@ -107,6 +113,8 @@ class GraspSingleCut:
         # Parse lines
         for i in range(self.v_num):
             lline = lines[i].split()
+            if lline[0] == "Field":
+                continue
             self.data[i, 0] = complex(float(lline[0]), float(lline[1]))
             self.data[i, 1] = complex(float(lline[2]), float(lline[3]))
             if self.field_components == 3:
