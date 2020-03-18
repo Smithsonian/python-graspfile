@@ -1,10 +1,13 @@
-name: Publish Python 🐍 distributions 📦 to TestPyPI
+name: Publish Python 🐍 distributions 📦 to PyPI
 
-on: push
+on:
+  push:
+    tags:
+        - 'v*' # Push events matching vx.y.z, i.e. version tags
 
 jobs:
   build-n-publish:
-    name: Build and publish Python 🐍 distributions 📦 to TestPyPI
+    name: Build and publish Tagged Python 🐍 distributions 📦 to PyPI
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@master
@@ -26,8 +29,7 @@ jobs:
         --binary
         --out-dir dist/
         .
-    - name: Publish distribution 📦 to Test PyPI
+    - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@master
       with:
-        password: ${{ secrets.test_pypi_password }}
-        repository_url: https://test.pypi.org/legacy/
+        password: ${{ secrets.pypi_password }}
