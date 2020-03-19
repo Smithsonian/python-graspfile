@@ -50,7 +50,11 @@ Installation
 
     pip install python-graspfile
 
-You can also install the in-development version with::
+You can also install the latest release candidate version with::
+
+    pip install --index-url https://test.pypi.org/simple/ python-graspfile
+
+You can install the latest in-development version with::
 
     pip install https://github.com/PaulKGrimes/python-graspfile/archive/master.zip
 
