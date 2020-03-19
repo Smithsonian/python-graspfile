@@ -1,9 +1,6 @@
 name: Publish Python 🐍 distributions 📦 to PyPI
 
-on:
-  push:
-    tags:
-        - 'v*' # Push events matching vx.y.z, i.e. version tags
+on: release
 
 jobs:
   build-n-publish:
