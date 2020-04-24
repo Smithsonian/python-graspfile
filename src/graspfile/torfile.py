@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 import torparser
 
-_debug_ = False
+_debug_ = True
 
 """List of acceptable GraspTorObject types"""
 grasp_object_types = [""]
@@ -13,14 +13,14 @@ grasp_object_types = [""]
 class GraspTorValue:
     """A container for values from GraspTorMember objects"""
 
-    def __init__(self, tor_value=None):
+    def __init__(self, tor_value="_None"):
         #: str: The value as a string
         self.value = None
 
         #: str: The unit of the value as a string
         self.unit = None
 
-        if tor_value:
+        if tor_value != "_None":
             self.fill(tor_value)
 
     def __repr__(self):
@@ -41,6 +41,8 @@ class GraspTorValue:
             else:
                 self.value = tor_value[0]
         except TypeError:
+            if _debug_:
+                print("TypeError caught for tor_value = {:}".format(tor_value))
             self.value = tor_value
 
 
@@ -81,7 +83,6 @@ class GraspTorMember:
             self._value = GraspTorSequence(tor_member[1:])
         else:
             self._value = GraspTorValue(tor_member[1])
-            self._type = "value"
 
     @property
     def type(self):
