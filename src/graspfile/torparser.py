@@ -6,13 +6,11 @@ from pyparsing import *
 
 tor_bnf = """
 file
-    ( object )
-    ( dblSlashComment )
+    object
+    cppStyleComment
 object type
     ( members )
     ()
-dblSlashComment
-    string
 members
     name : struct
     name : ref
@@ -41,39 +39,35 @@ value
 LPAREN, RPAREN, COLON, COMMA = map(Suppress, "():,")
 
 identifier = Word(alphas, alphanums + "_")
-tor_comment = OneOrMore(dblSlashComment)
+torComment = OneOrMore(dblSlashComment)
 
-
-def comment_handler(input_string, locn, tokens):
+def commentHandler(inputString, locn, tokens):
     tokenstr = "\n".join(tokens)
-    mod_string = "comment{:d} comment\n(\n{:s}\n)".format(locn, tokenstr)
-    mod_def = Dict(Group(identifier.setResultsName("_name") + identifier.setResultsName("_type") + LPAREN + Group(
-        OneOrMore(dblSlashComment)).setResultsName("text") + RPAREN))
-    return mod_def.parseString(mod_string)
+    modString = "comment{:d} comment\n(\n{:s}\n)".format(locn, tokenstr)
+    modDef = Dict(Group(identifier.setResultsName("_name") + identifier.setResultsName("_type") + LPAREN + Group(OneOrMore(dblSlashComment)).setResultsName("text") + RPAREN))
+    return modDef.parseString(modString)
 
+torComment.setParseAction(commentHandler)
+torComment.setResultsName("_name")
+torComment.setResultsName("_type")
 
-tor_comment.setParseAction(comment_handler)
-tor_comment.setResultsName("_name")
-tor_comment.setResultsName("_type")
-
-tor_string = dblQuotedString().setParseAction(removeQuotes)
+torString = dblQuotedString().setParseAction(removeQuotes)
 number = pyparsing_common.number()
 
-tor_members = Forward()
-tor_value = Forward()
+torMembers = Forward()
+torValue = Forward()
 
-tor_struct = Literal("struct").setResultsName("_type") + LPAREN + Dict(tor_members) + RPAREN
-tor_sequence = Literal("sequence").setResultsName("_type") + LPAREN + delimitedList(tor_value) + RPAREN
-tor_ref = Literal("ref").setResultsName("_type") + LPAREN + identifier + RPAREN
-tor_value << (tor_sequence | tor_ref | tor_struct | tor_string | Group(number + identifier) | number)
+torStruct = Literal("struct").setResultsName("_type") + LPAREN + Dict(torMembers) + RPAREN
+torSequence = Literal("sequence").setResultsName("_type") + LPAREN + delimitedList( torValue ) + RPAREN
+torRef = Literal("ref").setResultsName("_type") + LPAREN + identifier + RPAREN
+torValue << (torSequence | torRef | torStruct | torString | Group(number + identifier) | number )
 
-member_def = Dict(Group(identifier + COLON + tor_value))
-tor_members << delimitedList(member_def)
+memberDef = Dict(Group(identifier + COLON + torValue))
+torMembers << delimitedList(memberDef)
 
-object_def = Group(identifier.setResultsName("_name") + identifier.setResultsName("_type") + Dict(
-    LPAREN + Optional(tor_members) + RPAREN))
-tor_object = Dict(object_def | tor_comment)
-tor_file = Dict(OneOrMore(tor_object)) + stringEnd
+objectDef = Group(identifier.setResultsName("_name") + identifier.setResultsName("_type") + Dict(LPAREN + Optional(torMembers) + RPAREN))
+torObject = Dict(objectDef | torComment)
+torFile = Dict(OneOrMore(torObject)) + stringEnd
 
 test_str = """Primary_coor  coor_sys
 (
