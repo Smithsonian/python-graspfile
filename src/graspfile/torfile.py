@@ -219,12 +219,17 @@ class GraspTorComment:
         if tor_comment:
             self.fill(tor_comment)
 
+    def __repr__(self):
+        """Return the comment as // prefixed lines"""
+        return "\n".join(self.text)
+
     def fill(self, tor_comment):
         if _debug_:
             print("GraspTorComment.fill received: {:}".format(tor_comment))
-        self.name = tor_comment.name
-        self.location = int(tor_comment.name.lstrip("comment"))
-        self.text = tor_comment.text
+            print("with name: {:}".format(tor_comment[0]))
+        self.name = tor_comment[0]
+        self.location = int(self.name.lstrip("comment"))
+        self.text = tor_comment[2]
 
     @property
     def type(self):
@@ -250,17 +255,20 @@ class GraspTorObject(OrderedDict):
 
     def __repr__(self):
         """Return a useful string representation of the GraspTorObject object."""
-        memberstrings = []
-        for k in iter(self.keys()):
-            memberstrings.append(k + "   : " + repr(self[k]))
+        if self.type == "comment":
+            outstring = repr(self["comment"]) + "\n"
+        else:
+            memberstrings = []
+            for k in iter(self.keys()):
+                memberstrings.append(k + "   : " + repr(self[k]))
 
-        memberstring = ",\n  ".join(memberstrings)
+            memberstring = ",\n  ".join(memberstrings)
 
-        outstring = """{:}  {:}
+            outstring = """{:}  {:}
 (
   {:}
 )
-""".format(self._name, self._type, memberstring)
+    """.format(self._name, self._type, memberstring)
 
         return outstring
 
@@ -278,7 +286,10 @@ class GraspTorObject(OrderedDict):
         self._name = tor_obj[0]
         self._type = tor_obj[1]
         for r in tor_obj[2:]:
-            self[r[0]] = GraspTorMember(r)
+            if self._type == "comment":
+                self["comment"] = GraspTorComment(tor_obj)
+            else:
+                self[r[0]] = GraspTorMember(r)
 
     @property
     def name(self):
@@ -337,9 +348,5 @@ class GraspTorFile(OrderedDict):
     def fill(self, tor_file):
         """Fill the GraspTorFile using the parser results in torFile"""
         for r in tor_file:
-            if r.type == "comment":
-                temp = GraspTorComment(r)
-                self[temp.name] = temp
-            else:
-                temp = GraspTorObject(r)
-                self[temp.name] = temp
+            temp = GraspTorObject(r)
+            self[temp.name] = temp

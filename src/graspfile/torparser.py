@@ -43,6 +43,7 @@ torComment = OneOrMore(dblSlashComment)
 
 def commentHandler(inputString, locn, tokens):
     tokenstr = "\n".join(tokens)
+    print(tokens)
     modString = "comment{:d} comment\n(\n{:s}\n)".format(locn, tokenstr)
     modDef = Dict(Group(identifier.setResultsName("_name") + identifier.setResultsName("_type") + LPAREN + Group(OneOrMore(dblSlashComment)).setResultsName("text") + RPAREN))
     return modDef.parseString(modString)
