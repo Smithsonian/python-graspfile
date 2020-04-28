@@ -43,8 +43,8 @@ version = release = '0.1.3'
 pygments_style = 'trac'
 templates_path = ['.']
 extlinks = {
-    'issue': ('https://github.com/paulkgrimes/python-graspfile/issues/%s', '#'),
-    'pr': ('https://github.com/paulkgrimes/python-graspfile/pull/%s', 'PR #'),
+    'issue': ('https://github.com/Smithsonian/python-graspfile/issues/%s', '#'),
+    'pr': ('https://github.com/Smithsonian/python-graspfile/pull/%s', 'PR #'),
 }
 
 
