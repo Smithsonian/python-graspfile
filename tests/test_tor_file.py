@@ -2,7 +2,7 @@
 
 import io
 
-import graspfile
+import graspfile.torfile
 import pytest
 
 test_file = "tests/test_data/tor_files/python-graspfile-example.tor"
