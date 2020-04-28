@@ -7,7 +7,6 @@ Submodules
     :toctree: _autosummary
 
     cut
-    cutfile
     grid
 """
 
