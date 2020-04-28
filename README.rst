@@ -22,10 +22,6 @@ Overview
     :alt: Travis-CI Build Status
     :target: https://travis-ci.org/Smithsonian/python-graspfile
 
-.. |requires| image:: https://requires.io/github/Smithsonian/python-graspfile/requirements.svg?branch=master
-    :alt: Requirements Status
-    :target: https://requires.io/github/Smithsonian/python-graspfile/requirements/?branch=master
-
 .. |codecov| image:: https://codecov.io/github/Smithsonian/python-graspfile/coverage.svg?branch=master
     :alt: Coverage Status
     :target: https://codecov.io/github/Smithsonian/python-graspfile
