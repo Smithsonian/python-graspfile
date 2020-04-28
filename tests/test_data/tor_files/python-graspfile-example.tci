@@ -1,0 +1,14 @@
+//COMMAND OBJECT single_po get_currents ( source : sequence(ref(single_feed)),  &
+//auto_convergence_of_po : on, convergence_on_output_grid :  &
+//sequence(ref(cut_spherical_polar_linear_farfield))) single_po_cmd 
+COMMAND OBJECT cut_planar_radial_linear_nearfield get_field ( source :  &
+sequence(ref(single_po))) single_get_field_cmd 
+COMMAND OBJECT cut_planar_radial_circular_nearfield get_field ( source :  &
+sequence(ref(single_po))) cmd_1 
+COMMAND OBJECT cut_planar_radial_rhophi_nearfield get_field ( source :  &
+sequence(ref(single_po))) cmd_2 
+COMMAND OBJECT cut_planar_radial_majorminor_nearfield get_field ( source :  &
+sequence(ref(single_po))) cmd_3 
+COMMAND OBJECT cut_planar_radial_power_nearfield get_field ( source :  &
+sequence(ref(single_po))) cmd_4 
+QUIT 

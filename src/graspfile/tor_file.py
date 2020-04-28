@@ -2,9 +2,13 @@
 
 from collections import OrderedDict
 
-import torparser
+import graspfile.tor_parser as tor_parser
 
-_debug_ = True
+_debug_ = False
+
+# trick for py2/3 compatibility
+if 'basestring' not in globals():
+    basestring = str
 
 """List of acceptable GraspTorObject types"""
 grasp_object_types = [""]
@@ -14,6 +18,11 @@ class GraspTorValue:
     """A container for values from GraspTorMember objects"""
 
     def __init__(self, tor_value="_None"):
+        """Container for values within GraspTorMember, GraspTorStruct, and GraspTorSequence objects.
+
+        Args:
+            tor_value: a `pyparsing.ParseResults` object from a tor_value tokentcOK.
+        """
         #: str: The value as a string
         self.value = None
 
@@ -24,22 +33,36 @@ class GraspTorValue:
             self.fill(tor_value)
 
     def __repr__(self):
-        """Return a useful string representation of the GraspTorValue object."""
+        """Return a useful string representation of the GraspTorValue object.
+
+        Returns:
+            string representation of GraspTorValue in format suitable for use in a .tor file."""
         if self.unit:
             return repr(self.value) + " " + self.unit
         else:
-            return repr(self.value)
+            if isinstance(self.value, basestring):
+                return self.value
+            else:
+                return repr(self.value)
 
     def fill(self, tor_value):
+        """Fills the GraspTorValue object from output by the parser.
+
+        Args:
+            tor_value: a `pyparsing.ParseResults` class output by the tor_parser module.
+        """
         if _debug_:
             print("GraspTorValue.fill received: {:}".format(tor_value))
 
         try:
-            if len(tor_value) > 1:
-                self.value = tor_value[0]
-                self.unit = tor_value[1]
+            if isinstance(tor_value, basestring):
+                self.value = tor_value
             else:
-                self.value = tor_value[0]
+                if len(tor_value) > 1:
+                    self.value = tor_value[0]
+                    self.unit = tor_value[1]
+                else:
+                    self.value = tor_value[0]
         except TypeError:
             if _debug_:
                 print("TypeError caught for tor_value = {:}".format(tor_value))
@@ -91,7 +114,7 @@ class GraspTorMember:
 
     @property
     def value(self):
-        """Short circuit through torValue to supply tV.value if it is a simple value"""
+        """Short circuit through tor_value to supply tV.value if it is a simple value"""
         if self._type == "value":
             return self._value.value
         else:
@@ -109,7 +132,7 @@ class GraspTorMember:
 
     @property
     def unit(self):
-        """Short circuit through torValue to supply tV.unit if appropriate, else return None"""
+        """Short circuit through tor_value to supply tV.unit if appropriate, else return None"""
         if self._type == "value":
             return self._value.unit
         else:
@@ -131,6 +154,7 @@ class GraspTorMember:
 
 class GraspTorRef:
     """A container for a value that is a reference to another GraspTorObject"""
+
     def __init__(self, tor_ref=None):
 
         #: str: Reference to another GraspTorObject
@@ -152,7 +176,7 @@ class GraspTorSequence(list):
     """A container for a value that is a sequence of GraspTorValues."""
 
     def __init__(self, tor_seq=None):
-        super().__init__()
+        super(GraspTorSequence, self).__init__()
         if tor_seq:
             self.fill(tor_seq)
 
@@ -204,6 +228,7 @@ class GraspTorStruct(OrderedDict):
 
 class GraspTorComment:
     """A container for comments from a GraspTorFile"""
+
     def __init__(self, tor_comment=None):
         #: str: Name of comment object
         self.name = None
@@ -248,7 +273,7 @@ class GraspTorObject(OrderedDict):
 
         if isinstance(tor_obj, str):
             self.read_str(tor_obj)
-        elif isinstance(tor_obj, torparser.ParseResults):
+        elif isinstance(tor_obj, tor_parser.pp.ParseResults):
             self.fill(tor_obj)
         else:
             pass
@@ -273,8 +298,8 @@ class GraspTorObject(OrderedDict):
         return outstring
 
     def read_str(self, tor_str):
-        """Read the contents of the string into a torObject and then process the results"""
-        res = torparser.torObject.parseString(tor_str)
+        """Read the contents of the string into a tor_object and then process the results"""
+        res = tor_parser.tor_object.parseString(tor_str)
         self.fill(res)
 
     def fill(self, tor_obj):
@@ -323,7 +348,7 @@ class GraspTorFile(OrderedDict):
     def __init__(self, file_like=None):
         """Create a TorFile object, and if fileLike is specified, read the file"""
         OrderedDict.__init__(self)
-        self._parser = torparser.torFile
+        self._parser = tor_parser.tor_file
         if file_like:
             self.read(file_like)
 
@@ -346,7 +371,7 @@ class GraspTorFile(OrderedDict):
         self.fill(res)
 
     def fill(self, tor_file):
-        """Fill the GraspTorFile using the parser results in torFile"""
+        """Fill the GraspTorFile using the parser results in tor_file"""
         for r in tor_file:
             temp = GraspTorObject(r)
             self[temp.name] = temp

@@ -13,4 +13,4 @@ Submodules
 
 __version__ = '0.1.3'
 
-__all__ = ['cut', 'grid']
+__all__ = ['cut', 'grid', 'tor_file', 'tor_parser']

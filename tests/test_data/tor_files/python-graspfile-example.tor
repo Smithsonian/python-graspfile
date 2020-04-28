@@ -1,0 +1,134 @@
+single_global_coor  coor_sys
+(
+)
+
+single_frequencies  frequency
+(
+  frequency_list   : sequence(10.0 GHz,12.0 GHz,14.0 GHz)
+)
+
+single_surface  paraboloid
+(
+  focal_length     : 600.0 mm
+)
+
+single_rim  elliptical_rim
+(
+  centre           : struct(x: 520.0 mm, y: 0.0 mm),
+  half_axis        : struct(x: 500.0 mm, y: 500.0 mm)
+)
+
+single_reflector  reflector
+(
+  coor_sys         : ref(single_global_coor),
+  surfaces         : sequence(ref(single_surface)),
+  rim              : ref(single_rim)
+)
+
+single_feed_coor  coor_sys
+(
+  origin           : struct(x: 0.0 mm, y: 0.0 mm, z: 600.0 mm),
+  x_axis           : struct(x: 0.6838166561, y: 0.0, z: 0.7296538774),
+  y_axis           : struct(x: 0.0, y: -1.0, z: 0.0),
+  base             : ref(single_global_coor)
+)
+
+single_feed  gaussian_beam_pattern
+(
+  frequency        : ref(single_frequencies),
+  coor_sys         : ref(single_feed_coor),
+  taper_angle      : 39.40969575,
+  taper            : -12.0,
+  frequency_index_for_plot : 2
+)
+
+single_cut_coor  coor_sys
+(
+  origin           : struct(x: 519.999995 mm, y: 0.0 mm, z: 112.6666645 mm),
+  base             : ref(single_global_coor)
+)
+
+single_po  po_single_face_scatterer
+(
+  frequency        : ref(single_frequencies),
+  scatterer        : ref(single_reflector),
+  coor_sys         : ref(single_global_coor),
+  file_name        : po.cur
+)
+
+cut_spherical_polar_linear_farfield  spherical_cut
+(
+  coor_sys         : ref(single_cut_coor),
+  theta_range      : struct(start: -7.1570178, end: 7.1570178, np: 161),
+  phi_range        : struct(start: 0.0, end: 90.0, np: 3),
+  file_name        : example_GRASP_10-0-1_spherical_polar_linear_farfield.cut,
+  frequency        : ref(single_frequencies)
+)
+
+
+cut_spherical_polar_linear_nearfield  spherical_cut
+(
+  coor_sys         : ref(single_cut_coor),
+  theta_range      : struct(start: -7.1570178, end: 7.1570178, np: 161),
+  phi_range        : struct(start: 0.0, end: 90.0, np: 3),
+  near_far         : near,
+  near_dist        : 1.0 m,
+  file_name        : example_GRASP_10-0-1_spherical_polar_linear_nearfield.cut,
+  frequency        : ref(single_frequencies)
+)
+
+grid_spherical_uv_linear_farfield  spherical_grid
+(
+  coor_sys         : ref(single_cut_coor),
+  x_range          : struct(start: -0.1, end: 0.1, np: 21),
+  y_range          : struct(start: -0.1, end: 0.1, np: 21),
+  file_name        : example_GRASP_10-0-1_spherical_uv_linear_farfield.grd,
+  frequency        : ref(single_frequencies)
+)
+
+grid_spherical_uv_linear_nearfield  spherical_grid
+(
+  coor_sys         : ref(single_cut_coor),
+  x_range          : struct(start: -0.1, end: 0.1, np: 21),
+  y_range          : struct(start: -0.1, end: 0.1, np: 21),
+  near_far         : near,
+  near_dist        : 1.0 m,
+  file_name        : example_GRASP_10-0-1_spherical_uv_linear_nearfield.grd,
+  frequency        : ref(single_frequencies)
+)
+
+//DO NOT MODIFY OBJECTS BELOW THIS LINE.
+//THESE OBJECTS ARE CREATED AND MANAGED BY THE
+//GRAPHICAL USER INTERFACE AND SHOULD NOT BE
+//MODIFIED MANUALLY!
+view_1  view
+(
+  objects          : sequence(ref(view_1_coor_sys_plot),ref(view_1_reflector_plot),ref(view_1_feed_plot),
+ref(view_1_output_points_plot),ref(rays_from_point_sources))
+)
+
+view_1_coor_sys_plot  coor_sys_plot
+(
+)
+
+view_1_reflector_plot  reflector_plot
+(
+)
+
+view_1_feed_plot  feed_plot
+(
+)
+
+view_1_output_points_plot  output_points_plot
+(
+)
+
+rays_from_point_sources  rays_from_point_sources
+(
+  theta_range      : struct(start: 0.0, end: 39.4, np: 3),
+  phi_range        : struct(start: 0.0, end: 270.0, np: 4),
+  ray_path_range   : struct(start: 0.0 mm, end: 1.6 m)
+)
+
+ //$$ Saved at 14:40:39 on 24.04.2020 by TICRA Tools 19.1.1 SN=007539
+
