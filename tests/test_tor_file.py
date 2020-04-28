@@ -12,7 +12,7 @@ test_file = "tests/test_data/tor_files/python-graspfile-example.tor"
 @pytest.fixture
 def empty_tor_file():
     """Return an empty GraspTorFile instance."""
-    return graspfile.tor_file.GraspTorFile()
+    return graspfile.torfile.GraspTorFile()
 
 
 @pytest.fixture
@@ -47,6 +47,6 @@ def test_reloading_tor_file(filled_tor_file):
     except TypeError:
         test_io = io.StringIO(unicode(test_str))
 
-    reload_tor_file = graspfile.tor_file.GraspTorFile(test_io)
+    reload_tor_file = graspfile.torfile.GraspTorFile(test_io)
 
     assert len(filled_tor_file.keys()) == len(reload_tor_file.keys())

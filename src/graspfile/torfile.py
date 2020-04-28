@@ -2,7 +2,7 @@
 
 from collections import OrderedDict
 
-import graspfile.tor_parser as tor_parser
+import graspfile.torparser as torparser
 
 _debug_ = False
 
@@ -49,7 +49,7 @@ class GraspTorValue:
         """Fills the GraspTorValue object from output by the parser.
 
         Args:
-            tor_value: a `pyparsing.ParseResults` class output by the tor_parser module.
+            tor_value: a `pyparsing.ParseResults` class output by the torparser module.
         """
         if _debug_:
             print("GraspTorValue.fill received: {:}".format(tor_value))
@@ -273,7 +273,7 @@ class GraspTorObject(OrderedDict):
 
         if isinstance(tor_obj, str):
             self.read_str(tor_obj)
-        elif isinstance(tor_obj, tor_parser.pp.ParseResults):
+        elif isinstance(tor_obj, torparser.pp.ParseResults):
             self.fill(tor_obj)
         else:
             pass
@@ -299,7 +299,7 @@ class GraspTorObject(OrderedDict):
 
     def read_str(self, tor_str):
         """Read the contents of the string into a tor_object and then process the results"""
-        res = tor_parser.tor_object.parseString(tor_str)
+        res = torparser.tor_object.parseString(tor_str)
         self.fill(res)
 
     def fill(self, tor_obj):
@@ -348,7 +348,7 @@ class GraspTorFile(OrderedDict):
     def __init__(self, file_like=None):
         """Create a TorFile object, and if fileLike is specified, read the file"""
         OrderedDict.__init__(self)
-        self._parser = tor_parser.tor_file
+        self._parser = torparser.tor_file
         if file_like:
             self.read(file_like)
 

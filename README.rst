@@ -20,19 +20,19 @@ Overview
 
 .. |travis| image:: https://api.travis-ci.org/PaulKGrimes/python-graspfile.svg?branch=master
     :alt: Travis-CI Build Status
-    :target: https://travis-ci.org/PaulKGrimes/python-graspfile
+    :target: https://travis-ci.org/Smithsonian/python-graspfile
 
 .. |requires| image:: https://requires.io/github/PaulKGrimes/python-graspfile/requirements.svg?branch=master
     :alt: Requirements Status
-    :target: https://requires.io/github/PaulKGrimes/python-graspfile/requirements/?branch=master
+    :target: https://requires.io/github/Smithsonian/python-graspfile/requirements/?branch=master
 
 .. |codecov| image:: https://codecov.io/github/PaulKGrimes/python-graspfile/coverage.svg?branch=master
     :alt: Coverage Status
-    :target: https://codecov.io/github/PaulKGrimes/python-graspfile
+    :target: https://codecov.io/github/Smithsonian/python-graspfile
 
 .. |commits-since| image:: https://img.shields.io/github/commits-since/PaulKGrimes/python-graspfile/v0.1.3.svg
     :alt: Commits since latest release
-    :target: https://github.com/PaulKGrimes/python-graspfile/compare/v0.1.3...master
+    :target: https://github.com/Smithsonian/python-graspfile/compare/v0.1.3...master
 
 
 
