@@ -10,7 +10,7 @@ Overview
     * - docs
       - |docs|
     * - tests
-      - | |travis| |requires|
+      - | |travis|
         | |codecov|
     * - package
       - | |commits-since|
@@ -18,19 +18,15 @@ Overview
     :target: https://readthedocs.org/projects/python-graspfile
     :alt: Documentation Status
 
-.. |travis| image:: https://api.travis-ci.org/PaulKGrimes/python-graspfile.svg?branch=master
+.. |travis| image:: https://api.travis-ci.org/Smithsonian/python-graspfile.svg?branch=master
     :alt: Travis-CI Build Status
     :target: https://travis-ci.org/Smithsonian/python-graspfile
 
-.. |requires| image:: https://requires.io/github/PaulKGrimes/python-graspfile/requirements.svg?branch=master
-    :alt: Requirements Status
-    :target: https://requires.io/github/Smithsonian/python-graspfile/requirements/?branch=master
-
-.. |codecov| image:: https://codecov.io/github/PaulKGrimes/python-graspfile/coverage.svg?branch=master
+.. |codecov| image:: https://codecov.io/github/Smithsonian/python-graspfile/coverage.svg?branch=master
     :alt: Coverage Status
     :target: https://codecov.io/github/Smithsonian/python-graspfile
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/PaulKGrimes/python-graspfile/v0.1.3.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/Smithsonian/python-graspfile/v0.1.3.svg
     :alt: Commits since latest release
     :target: https://github.com/Smithsonian/python-graspfile/compare/v0.1.3...master
 
@@ -56,7 +52,7 @@ You can also install the latest release candidate version with::
 
 You can install the latest in-development version with::
 
-    pip install https://github.com/PaulKGrimes/python-graspfile/archive/master.zip
+    pip install https://github.com/Smithsonian/python-graspfile/archive/master.zip
 
 
 Documentation
