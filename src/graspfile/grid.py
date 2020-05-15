@@ -2,14 +2,13 @@
 """
 
 import numpy
-from graspfile import numpy_utilities as nu
 
 
 class GraspField:
     """Object holding a single dataset from a Grasp field on grid output file (``*.grd``)
 
-    The field is held in a complex numpy array of shape ``(grid_n_x, grid_n_y, ncomp)``
-    where ``grid_n_x`` and ``grid_n_y`` set the number of points in the grid and ``ncomp`` is the
+    The field is held in a complex numpy array of shape ``(grid_n_x, grid_n_y, field_components)``
+    where ``grid_n_x`` and ``grid_n_y`` set the number of points in the grid and ``field_components`` is the
     number of field components"""
 
     # This layout of array should mean that the polarisation components for a point
@@ -50,17 +49,19 @@ class GraspField:
             * 0: filled
             * 1: sparse"""
 
-        self.ncomp = 0
+        self.field_components = 0
         """Number of field components in grid.
+
+            Equivalent to the GRASP Grid file's ``ncomp``.
             ``2`` for far fields, ``3`` for near fields."""
 
         self.field = None
         """numpy.ndarray: the array of complex field components.
-            the field object is numpy array of shape ``(grid_n_x, grid_n_y, ncomp)``"""
+            the field object is numpy array of shape ``(grid_n_x, grid_n_y, field_components)``"""
 
-    def read_grasp_field(self, f, ncomp):
+    def read(self, f, field_components):
         """Reads the Grasp dataset from the file object passed in.  This assumes that
-        it is being called from the graspGrid classes read_grasp_grid(f) method, so that
+        it is being called from the graspGrid classes read(f) method, so that
         the file object is already at the start of the record"""
 
         # find the grid physical extents
@@ -69,7 +70,7 @@ class GraspField:
         self.grid_min_y = float(line[1])
         self.grid_max_x = float(line[2])
         self.grid_max_y = float(line[3])
-        self.ncomp = ncomp
+        self.field_components = field_components
 
         # find the number of points in the grid
         line = f.readline().split()
@@ -81,7 +82,7 @@ class GraspField:
         self.grid_step_y = (self.grid_max_y - self.grid_min_y) / (self.grid_n_y - 1)
 
         # We can now initialise the numpy arrays to hold the field data
-        self.field = numpy.zeros(shape=(self.grid_n_x, self.grid_n_y, self.ncomp), dtype=numpy.complex)
+        self.field = numpy.zeros(shape=(self.grid_n_x, self.grid_n_y, self.field_components), dtype=numpy.complex)
 
         for j in range(self.grid_n_y):
             # If k_limit is 1 then rows of grid are sparse (i.e. limited length)
@@ -97,7 +98,7 @@ class GraspField:
             # Read in the data
             for i in range(i_s, i_e):
                 line = f.readline().split()
-                if self.ncomp == 2:
+                if self.field_components == 2:
                     self.field[j, i, 0] = complex(float(line[0]), float(line[1]))
                     self.field[j, i, 1] = complex(float(line[2]), float(line[3]))
                 else:
@@ -119,44 +120,39 @@ class GraspField:
 
         return numpy.sqrt(off_x ** 2 + off_y ** 2)
 
-    def get_grid_mesh(self):
+    @property
+    def positions(self):
         """Return meshed grids of the x and y positions of each point in the field"""
         return numpy.meshgrid(numpy.linspace(self.grid_min_x, self.grid_max_x, self.grid_n_x),
                               numpy.linspace(self.grid_min_y, self.grid_max_y, self.grid_n_y))
 
-    def get_grid_pos(self):
-        """Return 1d arrays of the position values in the field."""
-        x_vals = numpy.linspace(self.grid_min_x, self.grid_max_x, self.grid_n_x)
-        y_vals = numpy.linspace(self.grid_min_y, self.grid_max_y, self.grid_n_y)
-        return x_vals, y_vals
+    def radius_grid(self, center=None):
+        """Return an array holding the radii of each point from the beam centre.
 
-    def get_grid_radius(self, center=None):
-        """Return an array holding the radii of each point from the beam centre"""
-        grid_x, grid_y = self.get_grid_mesh()
+        Args:
+            center: tuple holding coordinates of the center to calculate the radius from
+
+        Returns:
+            numpy.ndarray: numpy array with same shape as the field grid holding the radii.
+        """
+        grid_x, grid_y = self.positions
 
         if center is None:
             center = self.beam_center
 
         return numpy.sqrt((grid_x - center[0]) ** 2 + (grid_y - center[1]) ** 2)
 
-    def get_value(self, x_pos, y_pos):
-        """Return the value of the field at an x and y position. Finds the closest value to the requested x and y and
-        returns the value.
+    def rotate_polarization(self, angle=45.0):
+        """Rotate the basis of the polarization by <angle>. Will only work on linear polarization types
 
-        Arguments:
-            x_pos float: x position of the value in the grid.
-            y_pos float: y position of the value in the grid.
+        ***TODO: Implement checks for polarization type***
+
+        Args:
+            angle: angle in degrees to rotate the polarization basis by.
 
         Returns:
-            field value numpy.array: array containing the complex field components at (x_pos, y_pos)"""
-        x_vals, y_vals = self.get_grid_pos()
-        nx = nu.find_nearest_idx(x_vals, x_pos)
-        ny = nu.find_nearest_idx(y_vals, y_pos)
-
-        return self.field[nx, ny,:]
-
-    def rotate_polarization(self, angle=45.0):
-        """Rotate the basis of the polarization by <angle>"""
+            nothing.
+        """
         ang = numpy.deg2rad(angle)
         output0 = self.field[:, :, 0] * numpy.cos(ang) - self.field[:, :, 1] * numpy.sin(ang)
         output1 = self.field[:, :, 1] * numpy.cos(ang) + self.field[:, :, 0] * numpy.sin(ang)
@@ -175,20 +171,55 @@ class GraspGrid:
         """list of str: List of lines in the header section of the file"""
 
         # File Type parameters
-        self.ktype = 0
-        """int: type of file format."""
+        self.ktype = 1
+        """int: type of file format.
+
+        Always ``1`` for TICRA Tools files."""
 
         self.nset = 0
         """int: number of grids in file."""
 
-        self.icomp = 0
-        """int: type of field components."""
+        self.polarization = 0
+        """int: type of field components.
 
-        self.ncomp = 0
-        """int: number of field components"""
+        Equivalent to the GRASP Grid file's ``icomp``.
+
+        Values signify the following polarization definitions
+            * `1`: Linear E_theta and E_phi.
+            * `2`: Right hand and left hand circular (Erhc and Elhc).
+            * `3`: Linear Eco and Ecx (Ludwig's third definition).
+            * `4`: Linear along major and minor axes of the polarisation ellipse, Emaj and Emin.
+            * `5`: XPD fields: E_theta/E_phi and E_phi/E_theta.
+            * `6`: XPD fields: Erhc/Elhc and Elhc/Erhc.
+            * `7`: XPD fields: Eco/Ecx and Ecx/Eco.
+            * `8`: XPD fields: Emaj/Emin and Emin/Emaj.
+            * `9`: Total power \\|E\\| and Erhc=Elhc."""
+
+        self.field_components = 0
+        """int: number of field components.
+
+        Equivalent to the GRASP Grid file's ``ncomp``.
+        ``2`` for far fields, ``3`` for near fields."""
 
         self.igrid = 0
-        """int: grid type"""
+        """int: grid type.
+
+        Type of field grid.
+        * `1` : uv-grid: (X; Y ) = (u; v) where u and v are the two first coordinates of the unit vector to the field
+                point. Hence, r^ = u; v; p = √(1 − u² − v²) where u and v are related to the spherical angles by
+                u = sin θ cos φ; v = sin θ sin φ.
+        * `4` : Elevation over azimuth: (X; Y )=(Az,El), where Az and El define the direction to the field point by
+                r^ = − sin Az cos El; sin El; cos Az cos El.
+        * `5` : Elevation and azimuth: (X; Y )=(Az,El), where Az and El define the direction to the field point through
+                the relations Az = -θ cos φ; El = θ sin φ to the spherical angles θ and φ.
+        * `6` : Azimuth over elevation: (X; Y )= (Az, El), where Az and El define the direction to the field point by
+                r^ = − sin Az; cos Az sin El; cos Az cos El.
+        * `7` : θφ-grid: (X; Y ) = (φ; θ), where θ and φ are the spherical angles of the direction to the field point.
+        * `9` : Azimuth over elevation, EDX definition: (X; Y )=(Az,El), where Az and El define the direction to the
+                field point by r^ = sin Az cos El; sin El; cos Az cos El.
+        * `10` : Elevation over azimuth, EDX definition: (X; Y )= (Az, El), where Az and El define the direction to the
+                field point by r^ = sin Az; cos Az sin El; cos Az cos El.
+        """
 
         self.freqs = []
         """list: List of frequencies in units of ``freq_unit``"""
@@ -202,7 +233,7 @@ class GraspGrid:
         self.beam_centers = []
         """list: list of beam centers for individual fields in the file."""
 
-    def read_grasp_grid(self, fi):
+    def read(self, fi):
         """Reads GRASP output grid files from file object and fills a number of variables
         and numpy arrays with the data"""
 
@@ -242,7 +273,7 @@ class GraspGrid:
                 # If the frequency list is long, it may spread over more than one line
                 self.freq_unit = term.strip().split()[1].strip("[]")
 
-                freq_str_list = "  ".join(self.header[l + 1:]).split()
+                freq_str_list = "  ".join(self.header[l+1:]).split()
                 freqs = []
                 for f in freq_str_list:
                     freqs.append(float(f))
@@ -253,8 +284,8 @@ class GraspGrid:
         self.ktype = int(fi.readline())
         line = fi.readline().split()
         self.nset = int(line[0])
-        self.icomp = int(line[1])
-        self.ncomp = int(line[2])
+        self.polarization = int(line[1])
+        self.field_components = int(line[2])
         self.igrid = int(line[3])
 
         self.beam_centers = []
@@ -267,7 +298,7 @@ class GraspGrid:
         for i in range(self.nset):
             dataset = GraspField()
             dataset.beamCenter = self.beam_centers[i]
-            dataset.read_grasp_field(fi, self.ncomp)
+            dataset.read(fi, self.field_components)
             self.fields.append(dataset)
 
     def rotate_polarization(self, angle=45.0):

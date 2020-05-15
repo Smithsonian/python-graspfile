@@ -1,10 +1,10 @@
-# test_grid.py
+# test_cut.py
 
 import pytest
 from graspfile import cut
 from pytest import approx
 
-test_cut_file = "tests/test_data/grasp_files/horn_lens.cut"
+test_cut_file = "tests/test_data/grasp_files/cut_files/example_GRASP_10-0-1_spherical_polar_linear_farfield.cut"
 """TICRA Tools 19.1 GRASP Cut file"""
 
 
@@ -22,7 +22,7 @@ def cut_file():
 
 @pytest.fixture
 def filled_grasp_cut_file(empty_grasp_cutfile, cut_file):
-    """Return a GraspCutFile instance filled from the grid_file."""
+    """Return a GraspCutFile instance filled from the cut_file."""
     empty_grasp_cutfile.read(cut_file)
     cut_file.close()
     return empty_grasp_cutfile

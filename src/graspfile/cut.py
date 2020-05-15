@@ -93,6 +93,15 @@ class GraspSingleCut:
         # Get the specification of the cut and parse it
         specline = lines.pop(0)
         specs = specline.split()
+
+        # Make sure a stray comment line hasn't made it in at the start
+        if specs[0] == "Field":
+            if len(lines) != 0:
+                specline = lines.pop(0)
+                specs = specline.split()
+            else:
+                return
+
         self.v_ini = float(specs[0])
         self.v_inc = float(specs[1])
         self.v_num = int(specs[2])
@@ -107,13 +116,15 @@ class GraspSingleCut:
         # Parse lines
         for i in range(self.v_num):
             lline = lines[i].split()
+            if lline[0] == "Field":
+                continue
             self.data[i, 0] = complex(float(lline[0]), float(lline[1]))
             self.data[i, 1] = complex(float(lline[2]), float(lline[3]))
             if self.field_components == 3:
                 self.data[i, 2] = complex(float(lline[4]), float(lline[5]))
 
     @property
-    def pos(self):
+    def positions(self):
         """``numpy.array``: the positions of the data points in the cut file"""
         indices = numpy.arange(self.v_num, dtype=float)
         return self.v_ini + self.v_inc*indices
@@ -143,15 +154,15 @@ class GraspSingleCut:
         i_min = 0
         i_max = self.data.shape[0]
         for d in range(self.data.shape[0]):
-            if self.pos[d] >= pos_min:
+            if self.positions[d] >= pos_min:
                 if i_min == 0:
                     i_min = d
-            if self.pos[d] >= pos_max:
+            if self.positions[d] >= pos_max:
                 if i_max > d:
                     i_max = d
 
         # Set v_ini and v_num
-        output.v_ini = self.pos[i_min]
+        output.v_ini = self.positions[i_min]
         output.v_num = i_max - i_min + 1
 
         # Set data
@@ -211,7 +222,7 @@ class GraspCut:
             if len(line.split()) == 7:
                 # We have the start of a new cut
                 # Have we already collected a cut?
-                if temp_text:
+                if len(temp_text) > 2:
                     # Create new cut
                     new_cut = GraspSingleCut()
                     new_cut.read(temp_text)

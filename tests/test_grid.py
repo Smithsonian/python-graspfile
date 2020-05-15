@@ -23,7 +23,7 @@ def grid_file():
 @pytest.fixture
 def filled_grasp_grid(empty_grasp_grid, grid_file):
     """Return a GraspGrid instance filled from the grid_file."""
-    empty_grasp_grid.read_grasp_grid(grid_file)
+    empty_grasp_grid.read(grid_file)
     grid_file.close()
     return empty_grasp_grid
 
@@ -43,8 +43,8 @@ def test_loading_grid(filled_grasp_grid):
     # Check that parameters were read correctly
     assert filled_grasp_grid.ktype in [1]
     assert type(filled_grasp_grid.nset) is int
-    assert filled_grasp_grid.icomp in range(1, 12)
-    assert filled_grasp_grid.ncomp in [2, 3]
+    assert filled_grasp_grid.polarization in range(1, 12)
+    assert filled_grasp_grid.field_components in [2, 3]
     assert filled_grasp_grid.igrid in [2, 3, 8]
 
     # Check that beam centers were read correctly
@@ -83,14 +83,14 @@ def test_loading_field(filled_grasp_field):
         filled_grasp_field.grid_n_y - 1))
 
     assert filled_grasp_field.k_limit in [0, 1]
-    assert filled_grasp_field.ncomp in [2, 3]
+    assert filled_grasp_field.field_components in [2, 3]
 
     # Check that the shape of the field is consistent with grid parameters
     field_shape = filled_grasp_field.field.shape
 
     assert field_shape[0] == filled_grasp_field.grid_n_x
     assert field_shape[1] == filled_grasp_field.grid_n_y
-    assert field_shape[2] == filled_grasp_field.ncomp
+    assert field_shape[2] == filled_grasp_field.field_components
 
 
 def test_index_radial_dist(filled_grasp_field):
@@ -99,20 +99,20 @@ def test_index_radial_dist(filled_grasp_field):
     assert rdist >= 0.0
 
 
-def test_grid_mesh(filled_grasp_field):
+def test_grid_pos(filled_grasp_field):
     """Test the return of the meshed grid of positions"""
-    xgrid, ygrid = filled_grasp_field.get_grid_mesh()
+    xgrid, ygrid = filled_grasp_field.positions
 
     assert xgrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
     assert ygrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
 
 
 def test_radius_grid(filled_grasp_field):
-    rgrid = filled_grasp_field.get_grid_radius()
+    rgrid = filled_grasp_field.radius_grid()
 
     assert rgrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
 
-    rgrid2 = filled_grasp_field.get_grid_radius((0.1, 0.1))
+    rgrid2 = filled_grasp_field.radius_grid((0.1, 0.1))
 
     assert rgrid2.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
 

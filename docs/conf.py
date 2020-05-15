@@ -38,13 +38,13 @@ project = 'python-graspfile'
 year = '2019-2020'
 author = 'Paul Grimes'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.0.1'
+version = release = '0.2.0'
 
 pygments_style = 'trac'
 templates_path = ['.']
 extlinks = {
-    'issue': ('https://github.com/paulkgrimes/python-graspfile/issues/%s', '#'),
-    'pr': ('https://github.com/paulkgrimes/python-graspfile/pull/%s', 'PR #'),
+    'issue': ('https://github.com/Smithsonian/python-graspfile/issues/%s', '#'),
+    'pr': ('https://github.com/Smithsonian/python-graspfile/pull/%s', 'PR #'),
 }
 
 
