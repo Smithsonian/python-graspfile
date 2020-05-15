@@ -2,6 +2,12 @@
 Changelog
 =========
 
+0.2.0 (2020-04-28)
+------------------
+
+* Change ownership of repo to Smithsonian GitHub team
+* Incorporate `.tor` file parsing
+
 0.1.3 (2020-03-10)
 ------------------
 
