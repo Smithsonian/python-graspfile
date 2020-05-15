@@ -120,14 +120,22 @@ class GraspField:
 
         return numpy.sqrt(off_x ** 2 + off_y ** 2)
 
-    def grid_pos(self):
+    @property
+    def positions(self):
         """Return meshed grids of the x and y positions of each point in the field"""
         return numpy.meshgrid(numpy.linspace(self.grid_min_x, self.grid_max_x, self.grid_n_x),
                               numpy.linspace(self.grid_min_y, self.grid_max_y, self.grid_n_y))
 
     def radius_grid(self, center=None):
-        """Return an array holding the radii of each point from the beam centre"""
-        grid_x, grid_y = self.grid_pos()
+        """Return an array holding the radii of each point from the beam centre.
+
+        Args:
+            center: tuple holding coordinates of the center to calculate the radius from
+
+        Returns:
+            numpy.ndarray: numpy array with same shape as the field grid holding the radii.
+        """
+        grid_x, grid_y = self.positions
 
         if center is None:
             center = self.beam_center
@@ -135,7 +143,16 @@ class GraspField:
         return numpy.sqrt((grid_x - center[0]) ** 2 + (grid_y - center[1]) ** 2)
 
     def rotate_polarization(self, angle=45.0):
-        """Rotate the basis of the polarization by <angle>"""
+        """Rotate the basis of the polarization by <angle>. Will only work on linear polarization types
+
+        ***TODO: Implement checks for polarization type***
+
+        Args:
+            angle: angle in degrees to rotate the polarization basis by.
+
+        Returns:
+            nothing.
+        """
         ang = numpy.deg2rad(angle)
         output0 = self.field[:, :, 0] * numpy.cos(ang) - self.field[:, :, 1] * numpy.sin(ang)
         output1 = self.field[:, :, 1] * numpy.cos(ang) + self.field[:, :, 0] * numpy.sin(ang)
@@ -154,14 +171,29 @@ class GraspGrid:
         """list of str: List of lines in the header section of the file"""
 
         # File Type parameters
-        self.ktype = 0
-        """int: type of file format."""
+        self.ktype = 1
+        """int: type of file format.
+
+        Always ``1`` for TICRA Tools files."""
 
         self.nset = 0
         """int: number of grids in file."""
 
-        self.icomp = 0
-        """int: type of field components."""
+        self.polarization = 0
+        """int: type of field components.
+
+        Equivalent to the GRASP Grid file's ``icomp``.
+
+        Values signify the following polarization definitions
+            * `1`: Linear E_theta and E_phi.
+            * `2`: Right hand and left hand circular (Erhc and Elhc).
+            * `3`: Linear Eco and Ecx (Ludwig's third definition).
+            * `4`: Linear along major and minor axes of the polarisation ellipse, Emaj and Emin.
+            * `5`: XPD fields: E_theta/E_phi and E_phi/E_theta.
+            * `6`: XPD fields: Erhc/Elhc and Elhc/Erhc.
+            * `7`: XPD fields: Eco/Ecx and Ecx/Eco.
+            * `8`: XPD fields: Emaj/Emin and Emin/Emaj.
+            * `9`: Total power \\|E\\| and Erhc=Elhc."""
 
         self.field_components = 0
         """int: number of field components.
@@ -170,7 +202,24 @@ class GraspGrid:
         ``2`` for far fields, ``3`` for near fields."""
 
         self.igrid = 0
-        """int: grid type"""
+        """int: grid type.
+
+        Type of field grid.
+        * `1` : uv-grid: (X; Y ) = (u; v) where u and v are the two first coordinates of the unit vector to the field
+                point. Hence, r^ = u; v; p = √(1 − u² − v²) where u and v are related to the spherical angles by
+                u = sin θ cos φ; v = sin θ sin φ.
+        * `4` : Elevation over azimuth: (X; Y )=(Az,El), where Az and El define the direction to the field point by
+                r^ = − sin Az cos El; sin El; cos Az cos El.
+        * `5` : Elevation and azimuth: (X; Y )=(Az,El), where Az and El define the direction to the field point through
+                the relations Az = -θ cos φ; El = θ sin φ to the spherical angles θ and φ.
+        * `6` : Azimuth over elevation: (X; Y )= (Az, El), where Az and El define the direction to the field point by
+                r^ = − sin Az; cos Az sin El; cos Az cos El.
+        * `7` : θφ-grid: (X; Y ) = (φ; θ), where θ and φ are the spherical angles of the direction to the field point.
+        * `9` : Azimuth over elevation, EDX definition: (X; Y )=(Az,El), where Az and El define the direction to the
+                field point by r^ = sin Az cos El; sin El; cos Az cos El.
+        * `10` : Elevation over azimuth, EDX definition: (X; Y )= (Az, El), where Az and El define the direction to the
+                field point by r^ = sin Az; cos Az sin El; cos Az cos El.
+        """
 
         self.freqs = []
         """list: List of frequencies in units of ``freq_unit``"""
@@ -235,7 +284,7 @@ class GraspGrid:
         self.ktype = int(fi.readline())
         line = fi.readline().split()
         self.nset = int(line[0])
-        self.icomp = int(line[1])
+        self.polarization = int(line[1])
         self.field_components = int(line[2])
         self.igrid = int(line[3])
 

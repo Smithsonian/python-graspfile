@@ -43,7 +43,7 @@ def test_loading_grid(filled_grasp_grid):
     # Check that parameters were read correctly
     assert filled_grasp_grid.ktype in [1]
     assert type(filled_grasp_grid.nset) is int
-    assert filled_grasp_grid.icomp in range(1, 12)
+    assert filled_grasp_grid.polarization in range(1, 12)
     assert filled_grasp_grid.field_components in [2, 3]
     assert filled_grasp_grid.igrid in [2, 3, 8]
 
@@ -101,7 +101,7 @@ def test_index_radial_dist(filled_grasp_field):
 
 def test_grid_pos(filled_grasp_field):
     """Test the return of the meshed grid of positions"""
-    xgrid, ygrid = filled_grasp_field.grid_pos()
+    xgrid, ygrid = filled_grasp_field.positions
 
     assert xgrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
     assert ygrid.shape == (filled_grasp_field.grid_n_x, filled_grasp_field.grid_n_y)
