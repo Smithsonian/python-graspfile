@@ -73,13 +73,10 @@ class GraspTorMember:
     """A container for the member parameter of an GraspTorObject """
 
     def __init__(self, tor_member=None):
-        #: str: The name of the member of a GraspTorObject
         self.name = None
 
-        #: str: The type of the member
         self._type = None
 
-        #: various GraspTor values: The value of the Member parameter
         self._value = None
         if tor_member:
             self.fill(tor_member)

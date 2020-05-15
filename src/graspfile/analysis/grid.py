@@ -13,16 +13,16 @@ def find_peak(field, comp=0, max_radius=None, min_radius=None):
 
     Returns:
         x_peak float:, y_peak float: The x and y values of the peak value."""
-    x_vals, y_vals = field.get_grid_pos()
+    x_vals, y_vals = field.positions
 
     f = abs(field.field[:, :, comp])
     if max_radius is not None:
-        rad = field.get_grid_radius()
+        rad = field.radius_grid()
         rad_max_mask = ma.masked_greater(rad, max_radius)
         f = ma.array(f, mask=rad_max_mask.mask)
 
     if min_radius is not None:
-        rad = field.get_grid_radius()
+        rad = field.radius_grid()
         rad_min_mask = ma.masked_less(rad, min_radius)
         f = ma.array(f, mask=rad_min_mask.mask)
 
@@ -46,7 +46,7 @@ def find_center(field, comp=0, trunc_level=0.0, max_radius=None, min_radius=None
 
     Returns:
         x_cent float, y_cent float: The x and y values of the center of the field."""
-    xv, yv = field.get_grid_mesh()
+    xv, yv = field.positions
 
     f = abs(field.field[:, :, comp])
     if trunc_level != 0.0:
@@ -55,14 +55,14 @@ def find_center(field, comp=0, trunc_level=0.0, max_radius=None, min_radius=None
         yv = ma.array(yv, mask=f.mask)
 
     if max_radius is not None:
-        rad = field.get_grid_radius()
+        rad = field.radius_grid()
         rad_max_mask = ma.masked_greater(rad, max_radius)
         f = ma.array(f, mask=rad_max_mask.mask)
         xv = ma.array(xv, mask=rad_max_mask.mask)
         yv = ma.array(yv, mask=rad_max_mask.mask)
 
     if min_radius is not None:
-        rad = field.get_grid_radius()
+        rad = field.radius_grid()
         rad_min_mask = ma.masked_less(rad, min_radius)
         f = ma.array(f, mask=rad_min_mask.mask)
         xv = ma.array(xv, mask=rad_min_mask.mask)

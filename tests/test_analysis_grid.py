@@ -24,7 +24,7 @@ def grid_file():
 @pytest.fixture
 def filled_grasp_grid(empty_grasp_grid, grid_file):
     """Return a GraspGrid instance filled from the grid_file."""
-    empty_grasp_grid.read_grasp_grid(grid_file)
+    empty_grasp_grid.read(grid_file)
     grid_file.close()
     return empty_grasp_grid
 
@@ -57,7 +57,7 @@ def test_finding_peak_comp1(filled_grasp_field):
 
 def test_finding_peak_min_radius(filled_grasp_field):
     """Test find the peak of a grasp field"""
-    radii = filled_grasp_field.get_grid_radius()
+    radii = filled_grasp_field.radius_grid()
 
     shape = radii.shape
     min_radius = radii[int(shape[0]/3), int(shape[1]/3)]
@@ -72,7 +72,7 @@ def test_finding_peak_min_radius(filled_grasp_field):
 
 def test_finding_peak_max_radius(filled_grasp_field):
     """Test find the peak of a grasp field"""
-    radii = filled_grasp_field.get_grid_radius()
+    radii = filled_grasp_field.radius_grid()
 
     shape = radii.shape
     max_radius = radii[int(shape[0] / 5), int(shape[1] / 5)]
@@ -122,7 +122,7 @@ def test_finding_center_trunc(filled_grasp_field):
 
 def test_finding_center_min_radius(filled_grasp_field):
     """Test find the center of a grasp field"""
-    radii = filled_grasp_field.get_grid_radius()
+    radii = filled_grasp_field.radius_grid()
 
     shape = radii.shape
     min_radius = radii[int(shape[0]/3), int(shape[1]/3)]
@@ -137,7 +137,7 @@ def test_finding_center_min_radius(filled_grasp_field):
 
 def test_finding_center_max_radius(filled_grasp_field):
     """Test find the center of a grasp field"""
-    radii = filled_grasp_field.get_grid_radius()
+    radii = filled_grasp_field.radius_grid()
 
     shape = radii.shape
     max_radius = radii[int(shape[0] / 5), int(shape[1] / 5)]
