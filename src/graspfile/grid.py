@@ -123,8 +123,14 @@ class GraspField:
     @property
     def positions(self):
         """Return meshed grids of the x and y positions of each point in the field"""
-        return numpy.meshgrid(numpy.linspace(self.grid_min_x, self.grid_max_x, self.grid_n_x),
-                              numpy.linspace(self.grid_min_y, self.grid_max_y, self.grid_n_y))
+        x_positions, y_positions = self.positions_1d
+        return numpy.meshgrid(x_positions, y_positions)
+
+    @property
+    def positions_1d(self):
+        """Return numpy arrays of the x and y positions used in the field"""
+        return (numpy.linspace(self.grid_min_x, self.grid_max_x, self.grid_n_x),
+                numpy.linspace(self.grid_min_y, self.grid_max_y, self.grid_n_y))
 
     def radius_grid(self, center=None):
         """Return an array holding the radii of each point from the beam centre.

@@ -1,7 +1,7 @@
-# test_grid.py
+# test_analysis_grid.py
 
-import pytest
 import numpy as np
+import pytest
 from graspfile import grid
 from graspfile.analysis import grid as ga
 

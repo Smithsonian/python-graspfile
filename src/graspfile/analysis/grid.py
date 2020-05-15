@@ -13,7 +13,7 @@ def find_peak(field, comp=0, max_radius=None, min_radius=None):
 
     Returns:
         x_peak float:, y_peak float: The x and y values of the peak value."""
-    x_vals, y_vals = field.positions
+    x_vals, y_vals = field.positions_1d
 
     f = abs(field.field[:, :, comp])
     if max_radius is not None:
