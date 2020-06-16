@@ -1,6 +1,12 @@
 """This is the module for manipulating grid files containing one or more field cuts from TICRA Tools, GRASP and CHAMP
 """
 
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
+
+import graspfile.numpy_utilities as numpy_utilities
 import numpy
 
 
@@ -132,6 +138,21 @@ class GraspField:
         return (numpy.linspace(self.grid_min_x, self.grid_max_x, self.grid_n_x),
                 numpy.linspace(self.grid_min_y, self.grid_max_y, self.grid_n_y))
 
+    def get_value(self, xv, yv):
+        """Return the value of the field at the nearest point to xv, yv
+
+        Args:
+            xv: float containing the x coordinate of the point to get.
+            yv: float containing the y coordinate of the point to get.
+        Returns:
+            ndarray: containing self.field_components values of the field at xv, yv"""
+        x_vals, y_vals = self.positions_1d
+
+        nx = numpy_utilities.find_nearest_idx(x_vals, xv)
+        ny = numpy_utilities.find_nearest_idx(y_vals, yv)
+
+        return self.field[nx, ny, :]
+
     def radius_grid(self, center=None):
         """Return an array holding the radii of each point from the beam centre.
 
@@ -239,6 +260,54 @@ class GraspGrid:
         self.beam_centers = []
         """list: list of beam centers for individual fields in the file."""
 
+    def parse_header(self, header):
+        """Parse the header of a grid file for useful information
+
+        Args:
+            header: list of lines in the header text.
+        """
+        # Use configparser to interpret the header info.
+        # TO-DO:
+        #   This is very dodgy, as it ignores the possibility of different frequency sets for different
+        #   sources in the file, and erase the first source's information
+        #   We should build a real parser for this that can handle multiple copies of keys
+        config = configparser.ConfigParser(strict=False, allow_no_value=True)
+        config.read_string(u"[Default]\n" + "\n".join(header))
+        config = dict(config["Default"])
+        # Parse the header to get the frequency information
+        if "frequency" in config.keys():
+            # This works for TICRA GRASP version before TICRA Tools
+            res = config["frequency"]
+            first, arg, rest = res.partition(":")
+            if first.strip() == "start_frequency":
+                # print rest
+                # We have a frequency range
+                start, stop, num_freq = rest.rsplit(",")
+                self.freqs = numpy.linspace(float(start.split()[0]), float(stop.split()[0]), int(num_freq))
+            else:
+                # We probably have a list of frequencies
+                # print res
+                freq_strs = res.rsplit("'")
+                freqs = []
+                for f in freq_strs:
+                    freqs.append(float(f.split()[0]))
+                self.freqs = numpy.array(freqs)
+        else:
+            search_key = "frequencies"
+            term = [key for key, val in config.items() if search_key in key][0]
+            value = config[term]
+
+            # This works for TICRA Tools versions > 19.0
+            #
+            # If the frequency list is long, it may spread over more than one line
+            self.freq_unit = term.strip().split()[1].strip("[]")
+
+            freq_str_list = value.split()
+            freqs = []
+            for f in freq_str_list:
+                freqs.append(float(f))
+            self.freqs = numpy.array(freqs)
+
     def read(self, fi):
         """Reads GRASP output grid files from file object and fills a number of variables
         and numpy arrays with the data"""
@@ -253,37 +322,7 @@ class GraspGrid:
             else:
                 self.header.append(line)
 
-        # Parse the header to get the frequency information
-        for (l, line) in enumerate(self.header):
-            term, arg, res = line.partition(":")
-            if term.strip() == "FREQUENCY":
-                # This works for TICRA GRASP version before TICRA Tools
-                first, arg, rest = res.partition(":")
-                if first.strip() == "start_frequency":
-                    # print rest
-                    # We have a frequency range
-                    start, stop, num_freq = rest.rsplit(",")
-                    self.freqs = numpy.linspace(float(start.split()[0]), float(stop.split()[0]), int(num_freq))
-                else:
-                    # We probably have a list of frequencies
-                    # print res
-                    freq_strs = res.rsplit("'")
-                    freqs = []
-                    for f in freq_strs:
-                        freqs.append(float(f.split()[0]))
-                    self.freqs = numpy.array(freqs)
-                break
-            elif term.strip().split()[0] == "FREQUENCIES":
-                # This works for TICRA Tools versions > 19.0
-                #
-                # If the frequency list is long, it may spread over more than one line
-                self.freq_unit = term.strip().split()[1].strip("[]")
-
-                freq_str_list = "  ".join(self.header[l+1:]).split()
-                freqs = []
-                for f in freq_str_list:
-                    freqs.append(float(f))
-                self.freqs = numpy.array(freqs)
+        self.parse_header(self.header)
 
         # We've now got through the header text and are ready to read the general
         # field type parameters
