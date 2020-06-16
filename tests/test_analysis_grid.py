@@ -35,6 +35,27 @@ def filled_grasp_field(filled_grasp_grid):
     return filled_grasp_grid.fields[0]
 
 
+def test_get_value(filled_grasp_field):
+    """Test getting a value from the field"""
+    x_vals, y_vals = filled_grasp_field.positions_1d
+
+    # Test values of xv, yv in x_vals, y_vals
+    xv = x_vals[int(len(x_vals)/3)]
+    yv = y_vals[int(2*len(y_vals)/3)]
+
+    value = filled_grasp_field.get_value(xv, yv)
+
+    assert len(value) == filled_grasp_field.field_components
+
+    # Test values of xv, yv not in x_vals, y_vals
+    xv = (x_vals[int(len(x_vals)/3)] + x_vals[int(len(x_vals)/3)+1])/2
+    yv = (y_vals[int(2*len(y_vals)/3)] + y_vals[int(2*len(y_vals)/3)-1])/2
+
+    value = filled_grasp_field.get_value(xv, yv)
+
+    assert len(value) == filled_grasp_field.field_components
+
+
 def test_finding_peak(filled_grasp_field):
     """Test find the peak of a grasp field"""
     x_peak, y_peak = ga.find_peak(filled_grasp_field)

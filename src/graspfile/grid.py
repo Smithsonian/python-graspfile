@@ -1,8 +1,12 @@
 """This is the module for manipulating grid files containing one or more field cuts from TICRA Tools, GRASP and CHAMP
 """
 
-import configparser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
+import graspfile.numpy_utilities as numpy_utilities
 import numpy
 
 
@@ -133,6 +137,21 @@ class GraspField:
         """Return numpy arrays of the x and y positions used in the field"""
         return (numpy.linspace(self.grid_min_x, self.grid_max_x, self.grid_n_x),
                 numpy.linspace(self.grid_min_y, self.grid_max_y, self.grid_n_y))
+
+    def get_value(self, xv, yv):
+        """Return the value of the field at the nearest point to xv, yv
+
+        Args:
+            xv: float containing the x coordinate of the point to get.
+            yv: float containing the y coordinate of the point to get.
+        Returns:
+            ndarray: containing self.field_components values of the field at xv, yv"""
+        x_vals, y_vals = self.positions_1d
+
+        nx = numpy_utilities.find_nearest_idx(x_vals, xv)
+        ny = numpy_utilities.find_nearest_idx(y_vals, yv)
+
+        return self.field[nx, ny, :]
 
     def radius_grid(self, center=None):
         """Return an array holding the radii of each point from the beam centre.
