@@ -1,8 +1,10 @@
 # test_cut.py
 
 import pytest
-from graspfile import cut
 from pytest import approx
+
+from graspfile import cut
+
 
 test_cut_file = "tests/test_data/grasp_files/cut_files/example_GRASP_10-0-1_spherical_polar_linear_farfield.cut"
 """TICRA Tools 19.1 GRASP Cut file"""

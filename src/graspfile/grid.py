@@ -6,8 +6,10 @@ try:
 except ImportError:
     import ConfigParser as configparser
 
-import graspfile.numpy_utilities as numpy_utilities
 import numpy
+
+import graspfile.numpy_utilities as numpy_utilities
+
 
 
 class GraspField:

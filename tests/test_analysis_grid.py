@@ -2,6 +2,7 @@
 
 import numpy as np
 import pytest
+
 from graspfile import grid
 from graspfile.analysis import grid as ga
 
