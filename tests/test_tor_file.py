@@ -6,7 +6,6 @@ import pytest
 
 import graspfile.torfile
 
-
 test_file = "tests/test_data/tor_files/python-graspfile-example.tor"
 """TICRA Tools 10.0.1 GRASP .tor file"""
 
