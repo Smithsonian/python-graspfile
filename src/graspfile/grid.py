@@ -10,6 +10,7 @@ import numpy
 
 import graspfile.numpy_utilities as numpy_utilities
 
+
 class GraspField:
     """Object holding a single dataset from a Grasp field on grid output file (``*.grd``)
 
