@@ -350,3 +350,26 @@ class GraspGrid:
         """Rotate the polarization basis for each field in the GraspGrid"""
         for f in self.fields:
             f.rotate_polarization(angle)
+
+    def combine_fields(self, coherent=False):
+        """Sum fields within the grid object.
+
+        Assumes that all fields have the same positions, size, etc.
+
+        Args:
+            grid ``GraspGrid``: The grid object containing the fields to be summed.
+            coherent bool: Determines whether to form the complex sum or to sum amplitudes, discarding phase information.
+        """
+        new_field = self.fields[0]
+        new_field.field = numpy.zeros_like(self.fields[0].field)
+        for field in self.fields:
+            if coherent:
+                new_field.field += field.field[:, :, :]
+            else:
+                new_field.field += numpy.abs(field.field[:, :, :])
+
+        self.fields = [new_field]
+        if not coherent:
+            self.freqs = [numpy.mean(self.freqs)]
+        # Don't know what it means if we add fields coherently - frequencies of the fields can't differ for that to
+        # make any physical sense, so we shouldn't touch the .freqs attribute.

@@ -5,7 +5,7 @@ import numpy.ma as ma
 def find_peak(field, comp=0, max_radius=None, min_radius=None):
     """Find the peak magnitude of a component in the field.
 
-    Parameters:
+    Args:
         field ``GraspField``: The field to work on.
         comp int: The field component to look at.
         max_radius float: Ignore portions of the grid outside this radius from the center of the field.
@@ -77,3 +77,24 @@ def find_center(field, comp=0, trunc_level=0.0, max_radius=None, min_radius=None
     y_cent = np.sum(y_illum) / norm
 
     return x_cent, y_cent
+
+
+def combine_grids(grids, coherent=True):
+    """Sum fields from different grid files.
+
+    Assumes that all fields across grids have the same positions, size, etc.
+
+    Args:
+        grids list: of ``GraspGrid``: List of grid objects to combine.
+        coherent bool: Determines whether to form coherent or incoherent sum. Defaults to coherent as that is the more
+                        likely use case.
+    Returns:
+        ``GraspGrid``: A grid object containing a field for each of the matched fields in the supplied list of grids."""
+    new_grid = np.copy.deepcopy(grids[0])
+    for n, field in enumerate(new_grid.fields):
+        new_grid.fields[n].field = np.zeros_like(grids[0].fields[n].field)
+        for g, grid in enumerate(grids):
+            if coherent:
+                new_grid.fields[n].field += grids[g].fields[n].field
+            else:
+                new_grid.fields[n].field += np.abs(grids[g].fields[n].field)

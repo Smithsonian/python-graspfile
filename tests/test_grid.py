@@ -126,3 +126,20 @@ def test_rotate_polarization(filled_grasp_field):
     rot_field.rotate_polarization(ang)
 
     assert rot_field.field == approx(filled_grasp_field.field)
+
+
+def test_combine_grid(filled_grasp_grid):
+    comb_field = filled_grasp_grid
+
+    comb_field.combine_fields(coherent=False)
+
+    assert len(comb_field.fields) == 1
+    assert len(comb_field.freqs) == 1
+
+
+def test_combine_grid_coherent(filled_grasp_grid):
+    comb_field = filled_grasp_grid
+
+    comb_field.combine_fields(coherent=True)
+
+    assert len(comb_field.fields) == 1
