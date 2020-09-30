@@ -26,9 +26,9 @@ Overview
     :alt: Coverage Status
     :target: https://codecov.io/github/Smithsonian/python-graspfile
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/Smithsonian/python-graspfile/v0.3.1.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/Smithsonian/python-graspfile/v0.3.2.svg
     :alt: Commits since latest release
-    :target: https://github.com/Smithsonian/python-graspfile/compare/v0.3.1...master
+    :target: https://github.com/Smithsonian/python-graspfile/compare/v0.3.2...master
 
 
 
