@@ -17,23 +17,21 @@ def get_axes(n_axes, ax_label=None, ay_label=None):
     """
     if n_axes > 9:
         pp.rcParams['figure.figsize'] = 12, 16
-        fig, axes_array = pp.subplots(4, 3)
+        fig, axes_array = pp.subplots(4, 3, squeeze=False)
     elif n_axes > 6:
         pp.rcParams['figure.figsize'] = 12, 12
-        fig, axes_array = pp.subplots(3, 3)
+        fig, axes_array = pp.subplots(3, 3, squeeze=False)
     elif n_axes > 4:
         pp.rcParams['figure.figsize'] = 12, 9
-        fig, axes_array = pp.subplots(2, 3)
+        fig, axes_array = pp.subplots(2, 3, squeeze=False)
     elif n_axes > 2:
         pp.rcParams['figure.figsize'] = 12, 9
-        fig, axes_array = pp.subplots(2, 2)
+        fig, axes_array = pp.subplots(2, 2, squeeze=False)
     elif n_axes == 2:
         pp.rcParams['figure.figsize'] = 12, 9
-        fig, axs = pp.subplots(1, 2)
-        axes_array = [axs]
+        fig, axes_array = pp.subplots(1, 2, squeeze=False)
     else:  # One feed only
-        fig, ax = pp.subplots(1, 1)
-        axes_array = [[ax]]
+        fig, axes_array = pp.subplots(1, 1, squeeze=False)
 
     # Turn off all axes, and then turn them on when we use them
     for ax in axes_array.flatten():
