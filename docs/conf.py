@@ -38,7 +38,7 @@ project = 'python-graspfile'
 year = '2019-2020'
 author = 'Paul Grimes'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.3.3'
+version = release = '0.3.4'
 
 pygments_style = 'trac'
 templates_path = ['.']
