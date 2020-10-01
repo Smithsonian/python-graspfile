@@ -25,7 +25,7 @@ def read(*names, **kwargs):
 
 setup(
     name='python-graspfile',
-    version='0.3.4',
+    version='0.3.5',
     license='MIT',
     description="A package for reading, manipulating and eventually writing files output from TICRA Tools GRASP and "
                 "CHAMP software using numpy etc.",
