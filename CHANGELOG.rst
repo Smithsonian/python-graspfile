@@ -2,6 +2,12 @@
 Changelog
 =========
 
+0.3.5 (2020-10-01)
+------------------
+
+* Add functions for calculating reflectance and transmission - useful for correcting for lack of AR coatings in
+  GRASP PO calculations of lens and dielectrics.
+
 0.3.4 (2020-10-01)
 ------------------
 
