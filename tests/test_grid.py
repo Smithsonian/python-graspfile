@@ -144,3 +144,12 @@ def test_combine_grid_coherent(filled_grasp_grid):
     comb_field.combine_fields(coherent=True)
 
     assert len(comb_field.fields) == 1
+
+
+def test_scale_field(filled_grasp_field):
+    filled_grasp_field.scale_field(2.0)
+
+
+def test_scale_grid(filled_grasp_grid):
+    filled_grasp_grid.scale_fields(2.0)
+

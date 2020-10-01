@@ -187,6 +187,13 @@ class GraspField:
         self.field[:, :, 0] = output0
         self.field[:, :, 1] = output1
 
+    def scale_field(self, scale_factor):
+        """Multiply the complex field by a scale factor.
+
+        Args:
+            scale_factor (float:): Multiplier."""
+        self.field *= scale_factor
+
 
 # The main file object class
 class GraspGrid:
@@ -351,6 +358,14 @@ class GraspGrid:
         """Rotate the polarization basis for each field in the GraspGrid"""
         for f in self.fields:
             f.rotate_polarization(angle)
+
+    def scale_fields(self, scale_factor):
+        """Multiply the complex fields by a scale factor.
+
+        Args:
+            scale_factor (float:): Multiplier."""
+        for f in self.fields:
+            f.scale_field(scale_factor)
 
     def combine_fields(self, coherent=False):
         """Sum fields within the grid object.
