@@ -115,6 +115,21 @@ class GraspField:
 
         return 0
 
+    def write(self, fo):
+        """Write GRASP grid file to open file object `fo`"""
+        fo.write("{:.10E} {:.10E} {:.10E} {:.10E}\n".format(self.grid_min_x,
+                self.grid_min_y, self.grid_max_x, self.grid_max_y))
+        # Since we make our grids nonsparse when we read in, we assume that the
+        # grid is not sparse when outputting, and set k_limit to 0
+        fo.write("{:d} {:d} {:d}\n".format(self.grid_n_x, self.grid_n_y, 0))
+        for j in range(self.grid_n_y):
+            for i in range(self.grid_n_x):
+                fo.write("{:.10E} {:.10E} {:.10E} {:.10E}".format(self.field[j,i,0].real,
+                        self.field[j,i,0].imag, self.field[j,i,1].real, self.field[j,i,1].imag))
+                if field.field_components == 3:
+                    fo.write(" {:.10E} {:.10E}".format(self.field[j,i,2].real, self.field[j,i,2].imag))
+                fo.write("\n")
+
     def index_radial_dist(self, i, j):
         """Return radial distance from the beam center to an element of the field.
 
@@ -350,9 +365,23 @@ class GraspGrid:
         # we now start reading the individual fields
         for i in range(self.nset):
             dataset = GraspField()
-            dataset.beamCenter = self.beam_centers[i]
+            dataset.beam_center = self.beam_centers[i]
             dataset.read(fi, self.field_components)
             self.fields.append(dataset)
+
+    def write(self, fo):
+        """Write GRASP grid file to open file object `fo`"""
+        for l in self.header:
+            fo.write(l)
+        fo.write("++++\n")
+        fo.write("{:d}\n".format(self.ktype))
+        fo.write("{:d} {:d} {:d} {:d}\n".format(self.nset, self.polarization,
+                self.field_components, self.igrid))
+        for n in range(self.nset):
+            fo.write("{:d} {:d}\n".format(int(self.fields[n].beam_center[0]), int(self.fields[n].beam_center[1])))
+
+        for n in range(self.nset):
+            self.fields[n].write(fo)
 
     def rotate_polarization(self, angle=45.0):
         """Rotate the polarization basis for each field in the GraspGrid"""
