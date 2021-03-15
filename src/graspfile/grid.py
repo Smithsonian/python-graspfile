@@ -66,13 +66,13 @@ class GraspField:
         """numpy.ndarray: the array of complex field components.
             the field object is numpy array of shape ``(grid_n_x, grid_n_y, field_components)``"""
 
-    def read(self, f, field_components):
+    def read(self, fi, field_components):
         """Reads the Grasp dataset from the file object passed in.  This assumes that
-        it is being called from the graspGrid classes read(f) method, so that
+        it is being called from the graspGrid classes read(fi) method, so that
         the file object is already at the start of the record"""
 
         # find the grid physical extents
-        line = f.readline().split()
+        line = fi.readline().split()
         self.grid_min_x = float(line[0])
         self.grid_min_y = float(line[1])
         self.grid_max_x = float(line[2])
@@ -80,7 +80,7 @@ class GraspField:
         self.field_components = field_components
 
         # find the number of points in the grid
-        line = f.readline().split()
+        line = fi.readline().split()
         self.grid_n_x = int(line[0])
         self.grid_n_y = int(line[1])
         self.k_limit = int(line[2])
@@ -95,7 +95,7 @@ class GraspField:
             # If k_limit is 1 then rows of grid are sparse (i.e. limited length)
             # read the limits from each line before reading in data
             if self.k_limit == 1:
-                line = f.readline().split()
+                line = fi.readline().split()
                 i_s = int(line[0]) - 1
                 i_e = i_s + int(line[1])
             else:
@@ -104,7 +104,7 @@ class GraspField:
 
             # Read in the data
             for i in range(i_s, i_e):
-                line = f.readline().split()
+                line = fi.readline().split()
                 if self.field_components == 2:
                     self.field[j, i, 0] = complex(float(line[0]), float(line[1]))
                     self.field[j, i, 1] = complex(float(line[2]), float(line[3]))
@@ -114,6 +114,22 @@ class GraspField:
                     self.field[j, i, 2] = complex(float(line[4]), float(line[5]))
 
         return 0
+
+    def write(self, fo):
+        """Write GRASP grid file to open file object `fo`"""
+        fo.write("{:.10E} {:.10E} {:.10E} {:.10E}\n".format(self.grid_min_x,
+                                                            self.grid_min_y, self.grid_max_x, self.grid_max_y))
+        # Since we make our grids nonsparse when we read in, we assume that the
+        # grid is not sparse when outputting, and set k_limit to 0
+        fo.write("{:d} {:d} {:d}\n".format(self.grid_n_x, self.grid_n_y, 0))
+        for j in range(self.grid_n_y):
+            for i in range(self.grid_n_x):
+                fo.write("{:.10E} {:.10E} {:.10E} {:.10E}".format(self.field[j, i, 0].real,
+                                                                  self.field[j, i, 0].imag, self.field[j, i, 1].real,
+                                                                  self.field[j, i, 1].imag))
+                if self.field_components == 3:
+                    fo.write(" {:.10E} {:.10E}".format(self.field[j, i, 2].real, self.field[j, i, 2].imag))
+                fo.write("\n")
 
     def index_radial_dist(self, i, j):
         """Return radial distance from the beam center to an element of the field.
@@ -350,9 +366,24 @@ class GraspGrid:
         # we now start reading the individual fields
         for i in range(self.nset):
             dataset = GraspField()
-            dataset.beamCenter = self.beam_centers[i]
+            dataset.beam_center = self.beam_centers[i]
             dataset.read(fi, self.field_components)
             self.fields.append(dataset)
+
+    def write(self, fo):
+        """Write GRASP grid file to open file object `fo`"""
+        for l in self.header:
+            fo.write(l)
+        fo.write("++++\n")
+        fo.write("{:d}\n".format(self.ktype))
+        fo.write("{:d} {:d} {:d} {:d}\n".format(self.nset, self.polarization,
+                                                self.field_components, self.igrid))
+        for n in range(self.nset):
+            fo.write("{:d} {:d}\n".format(int(self.fields[n].beam_center[0]),
+                                          int(self.fields[n].beam_center[1])))
+
+        for n in range(self.nset):
+            self.fields[n].write(fo)
 
     def rotate_polarization(self, angle=45.0):
         """Rotate the polarization basis for each field in the GraspGrid"""
@@ -372,9 +403,8 @@ class GraspGrid:
 
         Assumes that all fields have the same positions, size, etc.
 
-        Args:
-            grid ``GraspGrid``: The grid object containing the fields to be summed.
-            coherent bool: Determines whether to form the complex sum or to sum amplitudes, discarding phase information.
+        Args: grid ``GraspGrid``: The grid object containing the fields to be summed. coherent bool: Determines
+        whether to form the complex sum or to sum amplitudes, discarding phase information.
         """
         new_field = self.fields[0]
         new_field.field = numpy.zeros_like(self.fields[0].field)
