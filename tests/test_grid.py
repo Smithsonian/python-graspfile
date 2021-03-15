@@ -22,6 +22,11 @@ def grid_file():
 
 
 @pytest.fixture
+def write_filename():
+    """Return a file name for test writing and reading back"""
+    return "tests/test_data/grasp_files/temp.grd"
+
+@pytest.fixture
 def filled_grasp_grid(empty_grasp_grid, grid_file):
     """Return a GraspGrid instance filled from the grid_file."""
     empty_grasp_grid.read(grid_file)
@@ -63,8 +68,8 @@ def test_rotate_grid_polarization(filled_grasp_grid):
 def test_loading_field(filled_grasp_field):
     """Test the individual field loaded as part of filled_grasp_grid"""
     # check that field parameters were filled correctly
-    assert type(filled_grasp_field.beam_center[0]) is float
-    assert type(filled_grasp_field.beam_center[1]) is float
+    assert type(filled_grasp_field.beam_center[0]) is int
+    assert type(filled_grasp_field.beam_center[1]) is int
     assert len(filled_grasp_field.beam_center) == 2
 
     assert type(filled_grasp_field.grid_min_x) is float
@@ -92,6 +97,29 @@ def test_loading_field(filled_grasp_field):
     assert field_shape[0] == filled_grasp_field.grid_n_x
     assert field_shape[1] == filled_grasp_field.grid_n_y
     assert field_shape[2] == filled_grasp_field.field_components
+
+
+def test_writing_grid(filled_grasp_grid, write_filename):
+    """Test writing of filled grid to file, and then reading it back"""
+    fo = open(write_filename, "w")
+    filled_grasp_grid.write(fo)
+    fo.close()
+
+    fi = open(write_filename, "r")
+    saved_grid = grid.GraspGrid()
+    saved_grid.read(fi)
+    fi.close()
+
+    # Check that all the freqs and fields were read
+    assert len(filled_grasp_grid.freqs) == len(saved_grid.freqs)
+    assert len(filled_grasp_grid.fields) == len(saved_grid.fields)
+
+    # Check that parameters were read correctly
+    assert filled_grasp_grid.ktype == saved_grid.ktype
+    assert filled_grasp_grid.nset == saved_grid.nset
+    assert filled_grasp_grid.polarization == saved_grid.polarization
+    assert filled_grasp_grid.field_components == saved_grid.field_components
+    assert filled_grasp_grid.igrid == saved_grid.igrid
 
 
 def test_index_radial_dist(filled_grasp_field):
