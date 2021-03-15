@@ -24,7 +24,7 @@ def grid_file():
 @pytest.fixture
 def write_filename():
     """Return a file name for test writing and reading back"""
-    return "tests/test_data/grasp_files/temp.grd"
+    return "temp.grd"
 
 @pytest.fixture
 def filled_grasp_grid(empty_grasp_grid, grid_file):
@@ -99,13 +99,14 @@ def test_loading_field(filled_grasp_field):
     assert field_shape[2] == filled_grasp_field.field_components
 
 
-def test_writing_grid(filled_grasp_grid, write_filename):
+def test_writing_grid(filled_grasp_grid, tmp_path, write_filename):
     """Test writing of filled grid to file, and then reading it back"""
-    fo = open(write_filename, "w")
+    filename = tmp_path / write_filename
+    fo = open(filename, "w")
     filled_grasp_grid.write(fo)
     fo.close()
 
-    fi = open(write_filename, "r")
+    fi = open(filename, "r")
     saved_grid = grid.GraspGrid()
     saved_grid.read(fi)
     fi.close()
