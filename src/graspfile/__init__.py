@@ -8,8 +8,12 @@ Submodules
 
     cut
     grid
+    torfile
+    torparser
+    analysis
+    plot
 """
 
 __version__ = '0.3.5'
 
-__all__ = ['cut', 'grid', 'plot', 'torfile', 'torparser']
+__all__ = ['cut', 'grid', 'plot', 'torfile', 'torparser', 'analysis']
