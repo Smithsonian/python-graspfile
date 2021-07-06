@@ -420,13 +420,13 @@ class GraspGrid:
                 new_field.field += field.field[:, :, :]
             else:
                 # Add power in the fields.
-                new_field.field = np.sqrt(new_field.field**2 + numpy.abs(field.field[:, :, :])**2)
+                new_field.field = numpy.sqrt(new_field.field**2 + numpy.abs(field.field[:, :, :])**2)
 
         if scale:
             if coherent:
                 new_field.field /= len(self.fields)
             else:
-                new_field.field /= np.sqrt(len(self.fields))
+                new_field.field /= numpy.sqrt(len(self.fields))
 
         self.fields = [new_field]
         if not coherent:
