@@ -398,21 +398,35 @@ class GraspGrid:
         for f in self.fields:
             f.scale_field(scale_factor)
 
-    def combine_fields(self, coherent=False):
+    def combine_fields(self, coherent=False, scale=True):
         """Sum fields within the grid object.
 
         Assumes that all fields have the same positions, size, etc.
 
-        Args: grid ``GraspGrid``: The grid object containing the fields to be summed. coherent bool: Determines
-        whether to form the complex sum or to sum amplitudes, discarding phase information.
+        Args:
+            coherent (bool):
+                If True, add complex values of fields directly, rather than adding
+                powers.
+            scale (bool):
+                Scale the output by the number of fields to be added, so that a mean
+                field is calculated.  Scales by number of fields for coherent summation
+                and by sqrt(number of fields) for incoherent summation.
         """
         new_field = self.fields[0]
         new_field.field = numpy.zeros_like(self.fields[0].field)
         for field in self.fields:
             if coherent:
+                # Add complex values
                 new_field.field += field.field[:, :, :]
             else:
-                new_field.field += numpy.abs(field.field[:, :, :])
+                # Add power in the fields.
+                new_field.field = np.sqrt(new_field.field**2 + numpy.abs(field.field[:, :, :])**2)
+
+        if scale:
+            if coherent:
+                new_field.field /= len(self.fields)
+            else:
+                new_field.field /= np.sqrt(len(self.fields))
 
         self.fields = [new_field]
         if not coherent:
