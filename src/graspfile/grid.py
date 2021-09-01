@@ -372,8 +372,8 @@ class GraspGrid:
 
     def write(self, fo):
         """Write GRASP grid file to open file object `fo`"""
-        for l in self.header:
-            fo.write(l)
+        for line in self.header:
+            fo.write(line)
         fo.write("++++\n")
         fo.write("{:d}\n".format(self.ktype))
         fo.write("{:d} {:d} {:d} {:d}\n".format(self.nset, self.polarization,
