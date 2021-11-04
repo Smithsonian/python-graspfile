@@ -18,7 +18,7 @@ Overview
     :target: https://readthedocs.org/projects/python-graspfile
     :alt: Documentation Status
 
-.. |tests| ![example workflow](https://github.com/Smithsonian/python-graspfile/actions/workflows/test-with-tox.yml/badge.svg)
+.. |tests| image:: ![example workflow](https://github.com/Smithsonian/python-graspfile/actions/workflows/test-with-tox.yml/badge.svg)
 
 .. |codecov| image:: https://codecov.io/github/Smithsonian/python-graspfile/coverage.svg?branch=master
     :alt: Coverage Status
