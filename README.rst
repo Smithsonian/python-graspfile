@@ -10,7 +10,7 @@ Overview
     * - docs
       - |docs|
     * - tests
-      - | |travis|
+      - | |tests|
         | |codecov|
     * - package
       - | |commits-since|
@@ -18,9 +18,7 @@ Overview
     :target: https://readthedocs.org/projects/python-graspfile
     :alt: Documentation Status
 
-.. |travis| image:: https://api.travis-ci.org/Smithsonian/python-graspfile.svg?branch=master
-    :alt: Travis-CI Build Status
-    :target: https://travis-ci.org/Smithsonian/python-graspfile
+.. |tests| ![example workflow](https://github.com/Smithsonian/python-graspfile/actions/workflows/test-with-tox.yml/badge.svg)
 
 .. |codecov| image:: https://codecov.io/github/Smithsonian/python-graspfile/coverage.svg?branch=master
     :alt: Coverage Status
@@ -85,4 +83,3 @@ Note, to combine the coverage data from all the tox environments run:
       - ::
 
             PYTEST_ADDOPTS=--cov-append tox
-
