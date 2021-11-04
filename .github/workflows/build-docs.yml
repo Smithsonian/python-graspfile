@@ -22,6 +22,7 @@ jobs:
         python -m pip install --upgrade pip
     - name: Install the package you're documenting together with its dependencies.
       run: |
+        pip install sphinx_rtd_theme
         pip install .
     - name: Build the sphinx documentation and posts warnings as github comments.
       uses: rickstaa/sphinx-action@master
