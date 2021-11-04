@@ -14,9 +14,9 @@ Overview
         | |codecov|
     * - package
       - | |commits-since|
-.. |docs| image:: https://readthedocs.org/projects/python-graspfile/badge/?style=flat
-    :target: https://readthedocs.org/projects/python-graspfile
-    :alt: Documentation Status
+.. |docs| image:: https://github.com/Smithsonian/python-graspfile/actions/workflows/build-docs.yml/badge.svg
+    :alt: Doc Build Status
+    :target: https://github.com/Smithsonian/python-graspfile/actions/workflows/build-docs.yml
 
 .. |tests| image:: https://github.com/Smithsonian/python-graspfile/actions/workflows/test-with-tox.yml/badge.svg
     :alt: Test Status
