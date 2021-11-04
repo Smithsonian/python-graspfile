@@ -26,7 +26,7 @@ jobs:
         run: tox
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
-        if: matrix.python-version == 3.8
+        if: matrix.python == 3.8
         with:
           env_vars: OS,PYTHON
           fail_ci_if_error: true
