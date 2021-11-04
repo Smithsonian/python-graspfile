@@ -89,7 +89,7 @@ class GraspField:
         self.grid_step_y = (self.grid_max_y - self.grid_min_y) / (self.grid_n_y - 1)
 
         # We can now initialise the numpy arrays to hold the field data
-        self.field = numpy.zeros(shape=(self.grid_n_x, self.grid_n_y, self.field_components), dtype=numpy.complex)
+        self.field = numpy.zeros(shape=(self.grid_n_x, self.grid_n_y, self.field_components), dtype=complex)
 
         for j in range(self.grid_n_y):
             # If k_limit is 1 then rows of grid are sparse (i.e. limited length)
@@ -372,8 +372,8 @@ class GraspGrid:
 
     def write(self, fo):
         """Write GRASP grid file to open file object `fo`"""
-        for l in self.header:
-            fo.write(l)
+        for line in self.header:
+            fo.write(line)
         fo.write("++++\n")
         fo.write("{:d}\n".format(self.ktype))
         fo.write("{:d} {:d} {:d} {:d}\n".format(self.nset, self.polarization,

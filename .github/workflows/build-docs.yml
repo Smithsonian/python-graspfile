@@ -1,0 +1,31 @@
+name: Build Docs
+# from https://github.com/ammaraskar/sphinx-action-test/blob/master/.github/workflows/default.yml
+on:
+  push:
+    paths:
+      - 'docs/**'
+      - '.github/workflows/build-docs.yml'
+
+jobs:
+  docs:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Update pip
+      run: |
+        python -m pip install --upgrade pip
+    - name: Install the package you're documenting together with its dependencies.
+      run: |
+        pip install sphinx_rtd_theme
+        pip install .
+    - name: Build the sphinx documentation and posts warnings as github comments.
+      uses: rickstaa/sphinx-action@master
+      with:
+        build-command: "sphinx-build -b html . dist/docs"
+        #docs-folder: "docs/"
