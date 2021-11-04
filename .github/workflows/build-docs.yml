@@ -20,11 +20,11 @@ jobs:
     - name: Update pip
       run: |
         python -m pip install --upgrade pip
-    - name: Install the package your documenting together with its dependencies.
+    - name: Install the package you're documenting together with its dependencies.
       run: |
         pip install .
     - name: Build the sphinx documentation and posts warnings as github comments.
       uses: rickstaa/sphinx-action@master
       with:
-        build-command: "sphinx-build {posargs:-E} -b html ."
+        build-command: "sphinx-build -E -b html ."
         docs-folder: "docs/"
