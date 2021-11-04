@@ -26,5 +26,5 @@ jobs:
     - name: Build the sphinx documentation and posts warnings as github comments.
       uses: rickstaa/sphinx-action@master
       with:
-        build-command: "sphinx-build {posargs:-E} -b html docs dist/docs"
+        build-command: "sphinx-build {posargs:-E} -b html ."
         docs-folder: "docs/"
