@@ -143,7 +143,7 @@ def plot_amplitude_fields(fields, component, suptitle=None, titles=None, xlabel=
         if titles:
             ax.set_title(titles[f])
 
-    fig.suplots_adjust(right=0.85)
+    fig.subplots_adjust(right=0.85)
     cbar_ax = fig.add_axes([0.87, 0.13, 0.02, 0.7])
     cbar = fig.colorbar(im, cax=cbar_ax)
     cbar.ax.set_ylabel(vlabel)
