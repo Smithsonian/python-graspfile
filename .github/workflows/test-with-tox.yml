@@ -1,6 +1,10 @@
 name: build
 
-on: [push]
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '.github/workflows/build-docs.yml'
 
 jobs:
   build:
