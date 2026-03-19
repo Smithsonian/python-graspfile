@@ -317,20 +317,24 @@ class GraspGrid:
                     freqs.append(float(f.split()[0]))
                 self.freqs = numpy.array(freqs)
         else:
-            search_key = "frequencies"
-            term = [key for key, val in config.items() if search_key in key][0]
-            value = config[term]
+            try:
+                search_key = "frequencies"
+                term = [key for key, val in config.items() if search_key in key][0]
+                value = config[term]
 
-            # This works for TICRA Tools versions > 19.0
-            #
-            # If the frequency list is long, it may spread over more than one line
-            self.freq_unit = term.strip().split()[1].strip("[]")
+                # This works for TICRA Tools versions > 19.0
+                #
+                # If the frequency list is long, it may spread over more than one line
+                self.freq_unit = term.strip().split()[1].strip("[]")
 
-            freq_str_list = value.split()
-            freqs = []
-            for f in freq_str_list:
-                freqs.append(float(f))
-            self.freqs = numpy.array(freqs)
+                freq_str_list = value.split()
+                freqs = []
+                for f in freq_str_list:
+                    freqs.append(float(f))
+                self.freqs = numpy.array(freqs)
+            except IndexError:
+                # There isn't any frequency information
+                self.frees = None
 
     def read(self, fi):
         """Reads GRASP output grid files from file object and fills a number of variables
